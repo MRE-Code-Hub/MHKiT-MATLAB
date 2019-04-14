@@ -26,7 +26,8 @@ function waveSpectra = CalcWaveSpectrum(waveTimeSeries,NFFT,sampleRate,varargin)
 %                           and metadata for the wave spectra calculation
 %
 % Dependencies
-%   frequencyMoment, waveNumber, KfromW, OmniDirEnergyFlux
+%   frequencyMoment, waveNumber, KfromW, OmniDirEnergyFlux, 
+%   initWaveSpectra
 %
 % Usage
 %   CalcWaveSpectrum(waveSpectra,NFFT,sampleRate)

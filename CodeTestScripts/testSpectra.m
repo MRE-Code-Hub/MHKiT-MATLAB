@@ -1,6 +1,6 @@
 function RunIssues = testSpectra(varargin)
 
-% function RunIssues = testPowerPerformace(LoadData)
+% function RunIssues = testSpectra(LoadData)
 %
 % Executes the power performance scripts and verifies the functions. This
 % function identifies any issues with the functionality and calculations
@@ -16,7 +16,7 @@ function RunIssues = testSpectra(varargin)
 %                   testing of the power performance scripts
 % Dependencies
 %   CalcWaveSpectrum, frequencyMoment, waveNumber, KfromW, 
-%   OmniDirEnergyFlux
+%   OmniDirEnergyFlux, initWaveSpectra
 %
 % Usage
 %   RunIssues = testPowerPerformace(LoadData)
