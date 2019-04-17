@@ -18,8 +18,8 @@ function J = OmniDirEnergyFlux(waveSpectra,varargin)
 %                           spectral calculations, where F1 is the lower
 %                           frequency limit and F2 is the upper frequency
 %                           limit
-%   deepWaterFlag (optional)a flag that forces deep water calculations, 1 =
-%                           deep water
+%   deepWaterFlag (optional)a flag that forces deep water calculations, 
+%                           set flat to 'D' for deep water
 %
 % Output:
 %   J                             omnidirectional wave energy flux (W/m)
@@ -33,7 +33,7 @@ function J = OmniDirEnergyFlux(waveSpectra,varargin)
 %   assumption and using default gravity and water
 %   density.
 %
-%   OmniDirEnergyFlux(waveSpectra,1)
+%   OmniDirEnergyFlux(waveSpectra,'D')
 %   calculates the omnidirection wave energy flux for deep water
 %   using default gravity and water density.
 %
@@ -121,7 +121,7 @@ if nargin > 1
             else
                 error('OmniDirEnergyFlux: Invalid input argument, freqRange values must be greater than 0');
             end;
-        elseif varargin{indx-1}== 1
+        elseif varargin{indx-1}== 'D'
             % deep water specified, overwriting the water depth
             waveSpectra.environment.waterDepth = inf;
         else
@@ -134,8 +134,6 @@ end;
 h   = waveSpectra.environment.waterDepth;
 rho = waveSpectra.environment.waterDensity;
 g   = waveSpectra.environment.g;
-
-%************ need to add in frequency range dependancy and check for f(1) == 0
 
 % Calculating the omnidirectional wave energy flux.
 if ~isinf(h)

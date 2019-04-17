@@ -70,6 +70,8 @@ end
 w = 2.*pi.*waveSpectra.frequency;
 
 %Make initial guess with Guo (2002)
+% Check to see if the first value of the angular frequency is zero, if so,
+% skip to the second value.
 if w(1) ~= 0
     xi = w(1)./sqrt(g./h); %note: =h*wa/sqrt(h*g/h)
     stIdx = 1;
