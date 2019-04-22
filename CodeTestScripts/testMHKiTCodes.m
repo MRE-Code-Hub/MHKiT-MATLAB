@@ -105,6 +105,7 @@ if any(contains(MHKiTTestScripts,'WaveResource'))
     RunIssues = testSpectra(data,RunIssues);
 end;
 
+RunIssues
 % % Specifiying the metadata
 % parameters = initParameters();
 

@@ -1,6 +1,6 @@
 function waveSpectra = CalcWaveSpectrum(waveElevation,waveTime,NFFT,sampleRate,varargin)
 
-% waveSpectra = OmniDirEnergyFlux(waveSpectra,parameters,freqRange,deepWaterFlag)
+% waveSpectra = CalcWaveSpectrum(waveSpectra,parameters,freqRange,deepWaterFlag, confLimit)
 %
 % Calculates the wave energy spectrum of a time series and populates the
 % waveSpectra MHKiT structure.
@@ -64,37 +64,45 @@ waveSpectra = initWaveSpectra();
 
 % check to see if the correct number of arguments are being passed
 if nargin < 4
-    error('CalcWaveSpectrum: Incorrect number of input arguments, requires at least 4 arguments');
+    ME = MException('MATLAB:CalcWaveSpectrum','Incorrect number of input arguments, requires at least 4 arguments, only %d arguments passed',nargin);
+    throw(ME);
 end;
 
 if nargin > 8
-    error('CalcWaveSpectrum: Incorrect number of input arguments, too many agruments, requires 8 at most');
+    ME = MException('MATLAB:CalcWaveSpectrum','Incorrect number of input arguments, too many agruments, requires 8 at most, %d arguments passed',nargin);
+    throw(ME);    
 end;
 
-%check to see if the first input argumeent is a time series
-if ~isvector(waveElevation)
-    error('CalcWaveSpectrum: waveElevation must be a vector');
+%check to see if the first input argumeent is a vector
+if any([~isvector(waveElevation), ~isnumeric(waveElevation), length(waveElevation) == 1])
+    ME = MException('MATLAB:CalcWaveSpectrum','waveElevation must be a numeric vector with length > 1');
+    throw(ME);    
 end;
 
-%check to see if the second input argument is a time series
-if ~isvector(waveTime)
-    error('CalcWaveSpectrum: waveTime must be a vector');
+%check to see if the second input argument is a vector and is monotonically
+%increasing
+if any([~isvector(waveTime), ~isnumeric(waveTime),length(waveTime) == 1])
+    ME = MException('MATLAB:CalcWaveSpectrum','waveTime must be a numeric vector with length > 1');
+    throw(ME);    
 end;
 
 % check to see if the time vector is the same length as the elevation
 % vector
 if length(waveTime) ~= length(waveElevation)
-    error('CalcWaveSpectrum: waveElevation and waveTime must be the same length');
+    ME = MException('MATLAB:CalcWaveSpectrum','waveElevation and waveTime must be the same length');
+    throw(ME);    
 end;
 
 %check to see if the second input is a single integer
-if ~isvector(NFFT) | mod(NFFT,1) ~= 0 | NFFT <= 0
-    error('CalcWaveSpectrum: NFFT must be an integer greater than 0');
+if any([length(NFFT) > 1,~isnumeric(NFFT), mod(NFFT,1) ~= 0, NFFT <= 0])
+    ME = MException('MATLAB:CalcWaveSpectrum','NFFT must be an integer greater than 0');
+    throw(ME);
 end;
 
 %check to see if the thrid input is a single number greater than 0
-if ~isvector(NFFT) | ~isnumeric(sampleRate) | sampleRate <= 0
-    error('CalcWaveSpectrum: sampleRate must be an number greater than 0');
+if any([length(sampleRate) > 1, ~isnumeric(sampleRate), sampleRate <= 0])
+    ME = MException('MATLAB:CalcWaveSpectrum','SampleRate must be an number greater than 0');
+    throw(ME);
 end;
 
 % parsing out and assigning the variables from the input arguments,
