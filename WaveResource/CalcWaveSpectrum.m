@@ -7,7 +7,7 @@ function waveSpectra = CalcWaveSpectrum(waveElevation,waveTime,NFFT,sampleRate,v
 %
 % Input:
 %   waveElevation           Time Series of wave elevation (m)
-%   waveTime                Wave Elevation time vector (s) 
+%   waveTime                Wave Elevation time vector (s)
 %   NFFT                    number of bins in the FFT (integer)
 %   sampleRate              sample rate of the wave elevation time series
 %                           (Hz)
@@ -19,9 +19,9 @@ function waveSpectra = CalcWaveSpectrum(waveElevation,waveTime,NFFT,sampleRate,v
 %                           spectral calculations, where F1 is the lower
 %                           frequency limit and F2 is the upper frequency
 %                           limit
-%   deepWaterFlag (optional)a flag that forces deep water calculations, to  
+%   deepWaterFlag (optional)a flag that forces deep water calculations, to
 %                           set the flag, include 'D' in the input
-%                           arguments 
+%                           arguments
 %
 %   confLimit (optional)    if a confidence interval is needed, include a
 %                           number between 0 and 1, where 1 is 100% and 0
@@ -33,27 +33,27 @@ function waveSpectra = CalcWaveSpectrum(waveElevation,waveTime,NFFT,sampleRate,v
 %                           and metadata for the wave spectra calculation
 %
 % Dependencies
-%   frequencyMoment, waveNumber, KfromW, OmniDirEnergyFlux, 
+%   frequencyMoment, waveNumber, KfromW, OmniDirEnergyFlux,
 %   initWaveSpectra
 %
 % Usage
 %   CalcWaveSpectrum(waveSpectra,NFFT,sampleRate)
-%   Calculates the spectrum and wave statistics using the deep water 
+%   Calculates the spectrum and wave statistics using the deep water
 %   assumption and using default gravity and water density. The statistics
 %   are calculated over all frequencies
-%   
+%
 %   CalcWaveSpectrum(waveSpectra,NFFT,sampleRate,parameters)
-%   calculates the spectrum and wave statistics using the values for 
+%   calculates the spectrum and wave statistics using the values for
 %   water depth, gravity and water density specified in the paraeters
 %   structure. The statistics are calcluated over all frequencies
 %
 %   CalcWaveSpectrum(waveSpectra,NFFT,sampleRate,freqRange)
-%   calculates the spectrum and wave statistics using the deep water 
+%   calculates the spectrum and wave statistics using the deep water
 %   assumption and using default gravity and water density. The statistics
 %   are calcluated between the frequency range specired by freqRange
 %
 %   CalcWaveSpectrum(waveSpectra,NFFT,sampleRate,'D')
-%   Calculates the spectrum and wave statistics using the deep water 
+%   Calculates the spectrum and wave statistics using the deep water
 %   assumption and using default gravity and water density. The statistics
 %   are calculated over all frequencies.
 %
@@ -70,27 +70,27 @@ end;
 
 if nargin > 8
     ME = MException('MATLAB:CalcWaveSpectrum','Incorrect number of input arguments, too many agruments, requires 8 at most, %d arguments passed',nargin);
-    throw(ME);    
+    throw(ME);
 end;
 
 %check to see if the first input argumeent is a vector
 if any([~isvector(waveElevation), ~isnumeric(waveElevation), length(waveElevation) == 1])
     ME = MException('MATLAB:CalcWaveSpectrum','waveElevation must be a numeric vector with length > 1');
-    throw(ME);    
+    throw(ME);
 end;
 
 %check to see if the second input argument is a vector and is monotonically
 %increasing
 if any([~isvector(waveTime), ~isnumeric(waveTime),length(waveTime) == 1])
     ME = MException('MATLAB:CalcWaveSpectrum','waveTime must be a numeric vector with length > 1');
-    throw(ME);    
+    throw(ME);
 end;
 
 % check to see if the time vector is the same length as the elevation
 % vector
 if length(waveTime) ~= length(waveElevation)
     ME = MException('MATLAB:CalcWaveSpectrum','waveElevation and waveTime must be the same length');
-    throw(ME);    
+    throw(ME);
 end;
 
 %check to see if the second input is a single integer
@@ -114,28 +114,35 @@ if nargin > 4
         if isstruct(varargin{indx-4})
             % checking for the parameters structure to be passed
             parameters = varargin{indx-4};
-            if parameters.structType   == 'Parameters'
+            if strcmp(parameters.structType,'Parameters')
                 waveSpectra.environment.waterDepth      = parameters.waterDepth;
                 waveSpectra.environment.waterDensity    = parameters.waterDensity;
                 waveSpectra.environment.g               = parameters.g;
             else
-                error('CalcWaveSpectrum: Invalid Structure input, must by type Parameters');
+                ME = MException('MATLAB:CalcWaveSpectrum','Invalid Structure input, must by type Parameters');
+                throw(ME);
             end;
         elseif ~isscalar(varargin{indx-4}) & isvector(varargin{indx-4})
             % checking to see if the input is the frequency range vector
-            if min(varargin{indx-4}) > 0 & length(varargin{indx-4}) == 2
+            if min(varargin{indx-4}) > 0 & length(varargin{indx-4}) == 2 & (varargin{indx-4}(2) > varargin{indx-4}(1))
                 waveSpectra.props.freqRange = varargin{indx-4};
             elseif length(varargin{indx-4}) ~= 2
-                error('CalcWaveSpectrum: Invalid input argument, freqRange must be a vector of length 2');
+                ME = MException('MATLAB:CalcWaveSpectrum','Invalid input argument, freqRange must be a vector of length 2');
+                throw(ME);
+            elseif (varargin{indx-4}(2) < varargin{indx-4}(1))
+                ME = MException('MATLAB:CalcWaveSpectrum','Invalid input argument, freqRange, second element must be greater that the first');
+                throw(ME);
             else
-                error('CalcWaveSpectrum: Invalid input argument, freqRange values must be greater than 0');
+                ME = MException('MATLAB:CalcWaveSpectrum','Invalid input argument, freqRange values must be greater than 0');
+                throw(ME);
             end;
         elseif varargin{indx-4}== 'D'
             waveSpectra.environment.waterDepth = inf;
         elseif isscalar(varargin{indx-4}) & varargin{indx-4} >=0 & varargin{indx-4} <=1
             waveSpectra.props.confInterval = varargin{indx-4};
         else
-            error('CalcWaveSpectrum: Invalid input arguments, unrecongnized flag or input argumjent');
+            ME = MException('MATLAB:CalcWaveSpectrum','Invalid input arguments, unrecongnized flag or input argumjent');
+            throw(ME);
         end;
     end;
 end;
@@ -146,9 +153,9 @@ if  isempty(waveSpectra.props.confInterval)
 else
     %calculate spectra with confidence interval
     if length(waveElevation)/NFFT >= 2
-    [waveSpectra.Spectrum,waveSpectra.frequency,ConfLimits] = pwelch(detrend(waveElevation), hanning(NFFT),[] , NFFT, sampleRate,'ConfidenceLevel',waveSpectra.props.confInterval);
-    waveSpectra.Upper95Conf = ConfLimits(:,1);
-    waveSpectra.Lower95Conf = ConfLimits(:,2);
+        [waveSpectra.Spectrum,waveSpectra.frequency,ConfLimits] = pwelch(detrend(waveElevation), hanning(NFFT),[] , NFFT, sampleRate,'ConfidenceLevel',waveSpectra.props.confInterval);
+        waveSpectra.Upper95Conf = ConfLimits(:,1);
+        waveSpectra.Lower95Conf = ConfLimits(:,2);
     else
         error('CalcWaveSpectrum: too few degrees of freedom to calculate the confidence interval. Increase the length of the time series so that the ratio of samples/NFFT >= 2');
     end;
@@ -179,7 +186,7 @@ waveSpectra.stats.Tm = frequencyMoment(waveSpectra,0)/frequencyMoment(waveSpectr
 [val,peakIdx] = max(waveSpectra.Spectrum);
 waveSpectra.stats.Tp = 1/waveSpectra.frequency(peakIdx);
 
-% Spectral bandwidth, 
+% Spectral bandwidth,
 waveSpectra.stats.e = sqrt(1- (frequencyMoment(waveSpectra,2).^2)/(frequencyMoment(waveSpectra,0)/frequencyMoment(waveSpectra,4)));
 
 % Spectral width, Longuet-Higgins’s spectral width (1975)

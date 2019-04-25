@@ -34,22 +34,22 @@ try
     CallFail = 0;
     eval(functionCall);
 catch ME
-        eval(['RunIssues.' functionName '(' num2str(testID), ').success = 0;']);
-        eval(['RunIssues.' functionName '(' num2str(testID), ').type = ''functionRunTest'';']);
-        eval(['RunIssues.' functionName '(' num2str(testID), ').message = ''' ME.message ''';']);
-        eval(['RunIssues.' functionName '(' num2str(testID), ').intendedMessage = ''' message ''';']);
-        eval(['RunIssues.' functionName '(' num2str(testID), ').Purpose = ''' testPurpose ''';']);
-        eval(['RunIssues.' functionName '(' num2str(testID), ').issue = ''Did not run'';']);
+        eval(['RunIssues.' functionName '.FunctionTest(' num2str(testID), ').success = 0;']);
+        eval(['RunIssues.' functionName '.FunctionTest(' num2str(testID), ').type = ''functionRunTest'';']);
+        eval(['RunIssues.' functionName '.FunctionTest(' num2str(testID), ').message = ''' ME.message ''';']);
+        eval(['RunIssues.' functionName '.FunctionTest(' num2str(testID), ').intendedMessage = ''' message ''';']);
+        eval(['RunIssues.' functionName '.FunctionTest(' num2str(testID), ').Purpose = ''' testPurpose ''';']);
+        eval(['RunIssues.' functionName '.FunctionTest(' num2str(testID), ').issue = ''Did not run'';']);
         CallFail = 1;
 end;
 
 if CallFail == 0;
-        eval(['RunIssues.' functionName '(' num2str(testID), ').success = 1;']);
-        eval(['RunIssues.' functionName '(' num2str(testID), ').type = ''functionRunTest'';']);
-        eval(['RunIssues.' functionName '(' num2str(testID), ').message = [];']);
-        eval(['RunIssues.' functionName '(' num2str(testID), ').intendedMessage = [];']);
-        eval(['RunIssues.' functionName '(' num2str(testID), ').Purpose = ''' testPurpose ''';']);
-        eval(['RunIssues.' functionName '(' num2str(testID), ').issue = ''none'';']);
+        eval(['RunIssues.' functionName '.FunctionTest(' num2str(testID), ').success = 1;']);
+        eval(['RunIssues.' functionName '.FunctionTest(' num2str(testID), ').type = ''functionRunTest'';']);
+        eval(['RunIssues.' functionName '.FunctionTest(' num2str(testID), ').message = [];']);
+        eval(['RunIssues.' functionName '.FunctionTest(' num2str(testID), ').intendedMessage = [];']);
+        eval(['RunIssues.' functionName '.FunctionTest(' num2str(testID), ').Purpose = ''' testPurpose ''';']);
+        eval(['RunIssues.' functionName '.FunctionTest(' num2str(testID), ').issue = ''none'';']);
 end;
 % incrementing the testID variable
 testID = testID + 1;

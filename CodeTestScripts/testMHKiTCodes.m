@@ -29,7 +29,7 @@ function RunIssues = testMHKiTCodes(varargin)
 persistent data;
 
 % setting path
-BaseDirectory = 'C:\Users\fdriscol\Desktop\Topic Area 5 Matlab\MHKiT_MatlabRepo\Matlab';
+BaseDirectory = 'C:\Users\fdriscol\Desktop\MHKiT\matlab';
 addpath(genpath(BaseDirectory),'-begin')
 
 

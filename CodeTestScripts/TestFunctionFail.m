@@ -22,32 +22,32 @@ try
 catch ME
     % perform string comparision here
     if strcmp(ME.message,message)
-        eval(['RunIssues.' functionName '(' num2str(testID), ').success = 1']);
-        eval(['RunIssues.' functionName '(' num2str(testID), ').type = ''errorCatchTest''']);
-        eval(['RunIssues.' functionName '(' num2str(testID), ').message = ''' ME.message ''';']);
-        eval(['RunIssues.' functionName '(' num2str(testID), ').intendedMessage = ''' message ''';']);
-        eval(['RunIssues.' functionName '(' num2str(testID), ').Purpose = ''' testPurpose ''';']);
-        eval(['RunIssues.' functionName '(' num2str(testID), ').issue = ''none'';']);
+        eval(['RunIssues.' functionName '.FailTest(' num2str(testID), ').success = 1;']);
+        eval(['RunIssues.' functionName '.FailTest(' num2str(testID), ').type = ''errorCatchTest'';']);
+        eval(['RunIssues.' functionName '.FailTest(' num2str(testID), ').message = ''' ME.message ''';']);
+        eval(['RunIssues.' functionName '.FailTest(' num2str(testID), ').intendedMessage = ''' message ''';']);
+        eval(['RunIssues.' functionName '.FailTest(' num2str(testID), ').Purpose = ''' testPurpose ''';']);
+        eval(['RunIssues.' functionName '.FailTest(' num2str(testID), ').issue = ''none'';']);
     else
         % if the wrong message was send, flag that
-        eval(['RunIssues.' functionName '(' num2str(testID), ').success = 0']);
-        eval(['RunIssues.' functionName '(' num2str(testID), ').type = ''errorCatchTest''']);        
-        eval(['RunIssues.' functionName '(' num2str(testID), ').message = ''' ME.message ''';']);
-        eval(['RunIssues.' functionName '(' num2str(testID), ').intendedMessage = ''' message ''';']); 
-        eval(['RunIssues.' functionName '(' num2str(testID), ').Purpose = ''' testPurpose ''';']);
-        eval(['RunIssues.' functionName '(' num2str(testID), ').issue = ''wrong error message'';']);
+        eval(['RunIssues.' functionName '.FailTest(' num2str(testID), ').success = 0;']);
+        eval(['RunIssues.' functionName '.FailTest(' num2str(testID), ').type = ''errorCatchTest'';']);        
+        eval(['RunIssues.' functionName '.FailTest(' num2str(testID), ').message = ''' ME.message ''';']);
+        eval(['RunIssues.' functionName '.FailTest(' num2str(testID), ').intendedMessage = ''' message ''';']); 
+        eval(['RunIssues.' functionName '.FailTest(' num2str(testID), ').Purpose = ''' testPurpose ''';']);
+        eval(['RunIssues.' functionName '.FailTest(' num2str(testID), ').issue = ''wrong error message'';']);
     end;
     CallFail = 1;
 end;
 
 % the function should have failed, if not, something is wrong and flag that
 if CallFail == 0
-        eval(['RunIssues.' functionName '(' num2str(testID), ').success = 0']);
-        eval(['RunIssues.' functionName '(' num2str(testID), ').type = ''errorCatchTest''']);
-        eval(['RunIssues.' functionName '(' num2str(testID), ').message = [];']);
-        eval(['RunIssues.' functionName '(' num2str(testID), ').intendedMessage = [];']);
-        eval(['RunIssues.' functionName '(' num2str(testID), ').Purpose = ''' testPurpose ''';']);
-        eval(['RunIssues.' functionName '(' num2str(testID), ').issue = ''no error, function call should have thrown an error'';']);
+        eval(['RunIssues.' functionName '.FailTest(' num2str(testID), ').success = 0;']);
+        eval(['RunIssues.' functionName '.FailTest(' num2str(testID), ').type = ''errorCatchTest'';']);
+        eval(['RunIssues.' functionName '.FailTest(' num2str(testID), ').message = [];']);
+        eval(['RunIssues.' functionName '.FailTest(' num2str(testID), ').intendedMessage = [];']);
+        eval(['RunIssues.' functionName '.FailTest(' num2str(testID), ').Purpose = ''' testPurpose ''';']);
+        eval(['RunIssues.' functionName '.FailTest(' num2str(testID), ').issue = ''no error, function call should have thrown an error'';']);
 end;
 
 % incrementing the testID variable
