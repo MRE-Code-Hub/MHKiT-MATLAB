@@ -24,7 +24,7 @@ function powerstats=CalcPowerDC(voltage,current,time,samplerate)
 %
 % Version 1, 05/17/2019 Rebecca Pauly, NREL
 
-powerstats = initpowerstats();
+powerstats = initPowerStats();
 
 % check to see if correct number of arguments were passed
 if nargin < 4 
@@ -92,6 +92,7 @@ powerstats.stats.chanmaxcurrent = max(current);
 powerstats.stats.chanmaxvoltage = max(voltage);
 powerstats.stats.chanmaxpower = max(powerstats.power);
 powerstats.stats.chanmincurrent = min(current);
+disp(powerstats.stats.chanmincurrent)
 powerstats.stats.chanminvoltage = min(voltage);
 powerstats.stats.chanminpower = min(powerstats.power);
 powerstats.stats.chanstdcurrent = std(current);
