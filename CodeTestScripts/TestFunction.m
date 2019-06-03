@@ -1,4 +1,4 @@
-function [RunIssues,testID, functionOutput] = TestFunction(functionName, numOutPutArgs, testPurpose, RunIssues, testID, varargin);
+function [RunIssues,testID] = TestFunction(functionName, numOutPutArgs, testPurpose, RunIssues, testID , functionOutput, varargin);
 
 
 % building the function call
@@ -37,7 +37,7 @@ catch ME
         eval(['RunIssues.' functionName '.FunctionTest(' num2str(testID), ').success = 0;']);
         eval(['RunIssues.' functionName '.FunctionTest(' num2str(testID), ').type = ''functionRunTest'';']);
         eval(['RunIssues.' functionName '.FunctionTest(' num2str(testID), ').message = ''' ME.message ''';']);
-        eval(['RunIssues.' functionName '.FunctionTest(' num2str(testID), ').intendedMessage = ''' message ''';']);
+        %eval(['RunIssues.' functionName '.FunctionTest(' num2str(testID), ').intendedMessage = ''' message ''';']);
         eval(['RunIssues.' functionName '.FunctionTest(' num2str(testID), ').Purpose = ''' testPurpose ''';']);
         eval(['RunIssues.' functionName '.FunctionTest(' num2str(testID), ').issue = ''Did not run'';']);
         CallFail = 1;

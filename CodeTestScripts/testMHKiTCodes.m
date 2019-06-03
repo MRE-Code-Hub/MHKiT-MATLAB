@@ -29,7 +29,7 @@ function RunIssues = testMHKiTCodes(varargin)
 persistent data;
 
 % setting path
-BaseDirectory = 'C:\Users\fdriscol\Desktop\MHKiT\matlab';
+BaseDirectory = 'C:\Users\rpauly\Documents\';
 addpath(genpath(BaseDirectory),'-begin')
 
 
@@ -78,6 +78,8 @@ if loadData
         eval(['data.d' num2str(setIdx) '.dyn = data.d' num2str(setIdx) '.data(:,2);']);
         eval(['data.d' num2str(setIdx) '.wave1 = data.d' num2str(setIdx) '.data(:,20)*0.0254;']);
         eval(['data.d' num2str(setIdx) '.wave2 = data.d' num2str(setIdx) '.data(:,21)*0.0254;']);
+        eval(['data.d' num2str(setIdx) '.torque = data.d' num2str(setIdx) '.data(:,3);']);
+        eval(['data.d' num2str(setIdx) '.angleRad = degtorad(data.d' num2str(setIdx) '.data(:,27));']);
         
         % setting the parameters for the data set
         eval(['data.d' num2str(setIdx) '.waterDensity = 1000;']);
@@ -89,7 +91,7 @@ end;
 % if the input argument RunTestScripts is not set, the run all of the
 % test scripts
 if isempty(MHKiTTestScripts)
-    MHKiTTestScripts = {'PowerPerformance','WaveResource'};
+    MHKiTTestScripts = {'PowerMeasurements'};
 end;
 
 RunIssues = [];
@@ -105,7 +107,12 @@ if any(contains(MHKiTTestScripts,'WaveResource'))
     RunIssues = testSpectra(data,RunIssues);
 end;
 
-RunIssues
+if any(contains(MHKiTTestScripts, 'PowerMeasurements'))
+    disp('Running PowerMeasurements Scripts');
+    RunIssues = testPower(data,RunIssues);
+end
+
+disp(RunIssues)
 % % Specifiying the metadata
 % parameters = initParameters();
 

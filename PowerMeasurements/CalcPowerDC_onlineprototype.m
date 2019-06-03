@@ -1,7 +1,7 @@
-function powerdata=CalcPowerWindow(voltage,current,time,samplerate,day_time,avgwindow,varagin)
+function powerdata=CalcPowerDC(voltage,current,time,samplerate,daytime,avgwindow,varagin)
 
-% Breaks down the input time series into averaging windows and 
-% Populates the InitPowerData structure 
+% Calcuates the Time series of net power from voltage and current
+% and populates the InitPowerData structure 
 %
 % Input:
 %    voltage                 Time series of measured volatege (V) of form 
@@ -22,16 +22,15 @@ function powerdata=CalcPowerWindow(voltage,current,time,samplerate,day_time,avgw
 %          vice-versa
 %
 % Output: 
-%    powerdata          Time series of the new power (W)
+%    power          Time series of the new power (W)
 %
 % Dependancies: 
 %        initPowerData
-%        CalcPowerDC
 %
 % Usage: 
-%    CalcPowerWindow(Voltage,current,time,samplerate,day_time,avgwindow,varagin)
-%    Breaks down the input time series into averaging windows and
-%    fills the powerdata structure
+%    CalcPowerDC(Voltage,current,time)
+%    Calculates the time series of net power for DC
+%    current 
 %
 % Version 1, 05/17/2019 Rebecca Pauly, NREL
 
@@ -39,12 +38,12 @@ powerdata = initPowerData();
 
 % check to see if correct number of arguments were passed
 if nargin < 6 
-    ME = MException('MATLAB:CalcPowerDC','Incorrect number of input arguments, requires at lest 5 arguments, %d arguments passed',nargin);
+    ME = MException('MATLAB:CalcPowerDC','Incorrect number of input arguments, reguires at lest 5 arguments, %d arguments passed',nargin);
     throw(ME);
 end
 
 if nargin > 8 
-    ME = MException('MATLAB:CalcPowerDC',['Incorrect number of input arguments, too many arguments, requires at most 8, %d arguments passed',nargin]);
+    ME = MException('MATLAB:CalcPowerDC',['Incorrect numner of input arguments, too many arguments, requires at most 7, %d arguments passed',nargin]);
     throw(ME);   
 end
 
@@ -67,10 +66,10 @@ if any([~isvector(time),~isnumeric(time),length(time)==1])
 end
 
 %check that avgwindow is a numeric scalar
-if any([length(avgwindow)~=1, ~isnumerictype(avgwindow)])
-    ME=MException('MATLAB:CalcPowerDC','avgwindow must be a numeric scalar');
-    throw(ME);
-end
+%if any([length(avgwindow)~=1, ~isnumerictype(avgwindow)])
+%    ME=MException('MATLAB:CalcPowerDC','avgwindow must be a numeric scalar');
+%    throw(ME);
+%end
 
 current_size = size(current);
 voltage_size = size(voltage);
@@ -86,7 +85,7 @@ end
 
 % check that time and current/voltage have a dimension of the same length
 
-if any([time_current_compare(1) ~= 1, time_voltage_compare(1) ~= 1])
+if any([time_current_compare(2) ~= 1, time_voltage_compare(2) ~= 1])
     ME=MException('MATLAB:CalcPowerDC','Time input is not same length as current or voltage dimension');
     throw(ME);
 end
@@ -115,10 +114,10 @@ else
     endind=time_size;
 end
 
-current=current(startind:endind,:);
-voltage=voltage(startind:endind,:);
-day_time=day_time(startind:endind,:);
-newtime=time(startind:endind,:);
+current=current(:,startind:endind);
+voltage=voltage(:,startind:endind);
+daytime=daytime(:,startind:endind);
+newtime=time(:,startind:endind);
 datatime_len=time(endind)-time(startind);
 window_len=samplerate*avgwindow;
 n_windows=length(newtime)/window_len;
@@ -126,30 +125,56 @@ starti=1;
 ind2=(1:n_windows)*window_len;
 ind1=ind2(1:end-1)+1;
 ind1=[1,ind1];
-powerdata.time=[day_time(ind1),day_time(ind2)];
-
-
+powerdata.starttime=daytime(ind1);
 for i=1:n_windows
-    powerstats=CalcPowerDC(voltage(ind1(i):ind2(i),:),current(ind1(i):ind2(i),:),newtime(ind1(i):ind2(i),:),samplerate);
-    powerdata.current.min=[powerdata.current.min;powerstats.stats.chanmincurrent];
-    powerdata.current.max=[powerdata.current.max;powerstats.stats.chanmaxcurrent];
-    powerdata.current.avg=[powerdata.current.avg;powerstats.stats.chanavgcurrent];
-    powerdata.current.std=[powerdata.current.std;powerstats.stats.chanstdcurrent];
-    powerdata.voltage.min=[powerdata.voltage.min;powerstats.stats.chanminvoltage];
-    powerdata.voltage.max=[powerdata.voltage.max;powerstats.stats.chanmaxvoltage];
-    powerdata.voltage.avg=[powerdata.voltage.avg;powerstats.stats.chanavgvoltage];
-    powerdata.voltage.std=[powerdata.voltage.std;powerstats.stats.chanstdvoltage];
-    powerdata.power.min=[powerdata.power.min;powerstats.stats.chanminpower];
-    powerdata.power.max=[powerdata.power.max;powerstats.stats.chanmaxpower];
-    powerdata.power.avg=[powerdata.power.avg;powerstats.stats.chanavgpower];
-    powerdata.power.std=[powerdata.power.std;powerstats.stats.chanstdpower];
-    powerdata.power.grossmin=[powerdata.power.grossmin;powerstats.stats.grossminpower];
-    powerdata.power.grossmax=[powerdata.power.grossmax;powerstats.stats.grossmaxpower];
-    powerdata.power.grossavg=[powerdata.power.grossavg;powerstats.stats.grossavgpower];
-    powerdata.power.grossstd=[powerdata.power.grossstd;powerstats.stats.grossstdpower];
+    powerdata.current(i)=current(:,ind1(i):ind2(i));
 end
-powerdata
-powerdata.current
-powerdata.voltage
-powerdata.power
+powerdata.current(4)
+%    powerdata.current=[powerdata.current,current(:,ind1(i):ind2(i));
+%disp(powerdata.current(2))
+% for i=1:n_windows
+%     endi=starti+window_len;    
 
+% Calculating the Power and statistics and filling the power data structure
+
+
+% eval(['powerdata(' num2str(i) ').current = current(:,starti:endi);']);
+% eval(['powerdata(' num2str(i) ').voltage = voltage(:,starti:endi);']);
+% eval(['powerdata(' num2str(i) ').starttime = daytime(starti);']);
+% eval(['powerdata(' num2str(i) ').endtime = daytime(endi);']);
+
+%starti=endi+1;
+
+% powerdata.power = current.*voltage;
+% powerdata.grosspower = sum(powerdata.power,2);
+% powerdata.nchan = current_size(1);
+% powerdata.props.samplerate = samplerate;
+% powerdata.props.numSamples = time_size;
+% powerdata.props.timeseriesduration = time_size*samplerate;
+% 
+% 
+% powerdata.stats.chanavgcurrent = mean(current);
+% powerdata.stats.chanavgvoltage = mean(voltage);
+% powerdata.stats.chanavgpower = mean(powerdata.power);
+% powerdata.stats.chanmaxcurrent = max(current);
+% powerdata.stats.chanmaxvoltage = max(voltage);
+% powerdata.stats.chanmaxpower = max(powerdata.power);
+% powerdata.stats.chanmincurrent = min(current);
+% powerdata.stats.chanminvoltage = min(voltage);
+% powerdata.stats.chanminpower = min(powerdata.power);
+% powerdata.stats.chanstdcurrent = std(current);
+% powerdata.stats.chanstdvoltage = std(voltage);
+% powerdata.stats.chanstdpower = std(powerdata.power);
+% 
+% powerdata.stats.grossavgpower = mean(powerdata.grosspower);
+% powerdata.stats.grossmaxpower = max(powerdata.grosspower);
+% powerdata.stats.grossminpower = min(powerdata.grosspower);
+% powerdata.stats.grossstdpower = std(powerdata.grosspower);
+% 
+% disp(powerdata.stats.grossavgpower)
+
+%end
+%disp(powerdata.starttime)
+
+
+end
