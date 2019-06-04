@@ -18,12 +18,12 @@ end;
 
 
 functionCall = [functionCall functionName '('];
-if nargin > 6
-    for inputIdx = 6:nargin
-        if inputIdx == 6
-            functionCall = [functionCall 'varargin{' num2str(inputIdx-5), '}'];
+if nargin > 7
+    for inputIdx = 7:nargin
+        if inputIdx == 7
+            functionCall = [functionCall 'varargin{' num2str(inputIdx-6), '}'];
         else
-        functionCall = [functionCall ',varargin{' num2str(inputIdx-5), '}'];
+        functionCall = [functionCall ',varargin{' num2str(inputIdx-6), '}'];
         end;
     end;
 end;

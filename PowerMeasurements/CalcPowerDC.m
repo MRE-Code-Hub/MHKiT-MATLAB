@@ -45,13 +45,13 @@ end
 
 %check that the 2nd input argument is a numeric matrix
 if any([~ismatrix(current),~isnumeric(current),length(current)==1])
-    ME=MException('MATLAB:CalcPowerDC','Current must be a numeric matrix with lenght >1');
+    ME=MException('MATLAB:CalcPowerDC','Current must be a numeric matrix with length >1');
     throw(ME);
 end
 
 %check that the 3rd input argument is a numeric vector
 if any([~isvector(time),~isnumeric(time),length(time)==1])
-    ME=MException('MATLAB:CalcPowerDC','Time must be a numeric vector with lenght >1');
+    ME=MException('MATLAB:CalcPowerDC','Time must be a numeric vector with length >1');
     throw(ME);
 end
 

@@ -1,4 +1,4 @@
-function powerdata=CalcPowerWindow(voltage,current,time,samplerate,day_time,avgwindow,varagin)
+function powerdata=CalcPowerWindow(voltage,current,time,samplerate,day_time,avgwindow,varargin)
 
 % Breaks down the input time series into averaging windows and 
 % Populates the InitPowerData structure 
@@ -39,7 +39,7 @@ powerdata = initPowerData();
 
 % check to see if correct number of arguments were passed
 if nargin < 6 
-    ME = MException('MATLAB:CalcPowerDC','Incorrect number of input arguments, requires at lest 5 arguments, %d arguments passed',nargin);
+    ME = MException('MATLAB:CalcPowerDC','Incorrect number of input arguments, requires at lest 6 arguments, %d arguments passed',nargin);
     throw(ME);
 end
 
@@ -50,7 +50,7 @@ end
 
 % check that first input argument is a numeric matrix
 if any([~ismatrix(voltage),~isnumeric(voltage), length(voltage)==1])
-    ME=MException('MATLAB: CalcPowerDC','voltage must be a numeric matrix with length > 1');
+    ME=MException('MATLAB:CalcPowerDC','voltage must be a numeric matrix with length > 1');
     throw(ME);
 end
 
@@ -67,7 +67,7 @@ if any([~isvector(time),~isnumeric(time),length(time)==1])
 end
 
 %check that avgwindow is a numeric scalar
-if any([length(avgwindow)~=1, ~isnumerictype(avgwindow)])
+if any([length(avgwindow)~=1, ~isnumeric(avgwindow)])
     ME=MException('MATLAB:CalcPowerDC','avgwindow must be a numeric scalar');
     throw(ME);
 end
@@ -98,11 +98,13 @@ if nargin == 7
 end
 
 if nargin == 8
-    if any([~isscalar(starttime),~isnumerictype(starttime)])
+    starttime=varargin{1};
+    endtime=varargin{2};
+    if any([length(starttime)~=1,~isnumeric(starttime)])
         ME=MException('MATLAB:CalcPowerDC','Starttime needs to be a scalar of numeric type');
         throw(ME);
     end
-    if any([~isscalar(endtime),~isnumerictype(endtime)])
+    if any([length(endtime)~=1,~isnumeric(endtime)])
         ME=MException('MATLAB:CalcPowerDC','Endtime needs to be a numeric type scalar');
         throw(ME);
     end
