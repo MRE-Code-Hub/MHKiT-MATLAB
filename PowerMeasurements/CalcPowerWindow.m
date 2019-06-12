@@ -150,8 +150,5 @@ for i=1:n_windows
     powerdata.power.grossavg=[powerdata.power.grossavg;powerstats.stats.grossavgpower];
     powerdata.power.grossstd=[powerdata.power.grossstd;powerstats.stats.grossstdpower];
 end
-powerdata
-powerdata.current
-powerdata.voltage
-powerdata.power
+
 
