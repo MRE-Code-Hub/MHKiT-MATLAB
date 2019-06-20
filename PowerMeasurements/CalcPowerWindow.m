@@ -25,29 +25,46 @@ function powerdata=CalcPowerWindow(voltage,current,time,samplerate,dateTime,para
 %                           the entire time series. This variable should
 %                           also be made from the DateNumber function. 
 % Output: 
-%    powerdata          Time series of the new power (W)
+%    powerdata          Power statistics structure for each averaging window
 %
 % Dependancies: 
 %        initPowerData
 %        CalcPowerDC
 %
 % Usage: 
-%    CalcPowerWindow(Voltage,current,time,samplerate,day_time,avgwindow,varagin)
+%    CalcPowerWindow(Voltage,current,time,samplerate,dateTime,parameters)
 %    Breaks down the input time series into averaging windows and
 %    fills the powerdata structure
+%
+%    CalcPowerWindow(Voltage,current,time,samplerate,dateTime,parameters,timeRange)
+%    Breaks down the input time series into averaging windows and
+%    fills the powerdata structure. timeRange will dictate the subset of
+%    the time series which is used. 
+
 %
 % Version 1, 05/17/2019 Rebecca Pauly, NREL
 
 powerdata = initPowerData();
 
+% check to see if correct number of arguments were passed
+if nargin < 6 
+    ME = MException('MATLAB:CalcPowerWindow','Incorrect number of input arguments, requires at lest 6 arguments, %d arguments passed',nargin);
+    throw(ME);
+end
+
+if nargin > 7 
+    ME = MException('MATLAB:CalcPowerWindow',['Incorrect number of input arguments, too many arguments, requires at most 7, %d arguments passed',nargin]);
+    throw(ME);   
+end
+
 if isstruct(parameters)
     % checking for the parameters structure to be passed
     if ~strcmp(parameters.structType,'Parameters')
-        ME = MException('MATLAB:CalcWaveSpectrumST','Invalid input, parameters must by struture of type Parameters');
+        ME = MException('MATLAB:CalcPowerWindow','Invalid input, parameters must by struture of type Parameters');
         throw(ME);
     end;
 else
-    ME = MException('MATLAB:CalcWaveSpectrumST','Invalid input, parameters must by struture of type Parameters');
+    ME = MException('MATLAB:CalcPowerWindow','Invalid input, parameters must by struture of type Parameters');
     throw(ME);
 end;
 
@@ -66,32 +83,23 @@ endIdx              = length(voltage);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% check to see if correct number of arguments were passed
-if nargin < 6 
-    ME = MException('MATLAB:CalcPowerDC','Incorrect number of input arguments, requires at lest 6 arguments, %d arguments passed',nargin);
-    throw(ME);
-end
 
-if nargin > 7 
-    ME = MException('MATLAB:CalcPowerDC',['Incorrect number of input arguments, too many arguments, requires at most 7, %d arguments passed',nargin]);
-    throw(ME);   
-end
 
 % check that first input argument is a numeric matrix
 if any([~ismatrix(voltage),~isnumeric(voltage), length(voltage)==1])
-    ME=MException('MATLAB:CalcPowerDC','voltage must be a numeric matrix with length > 1');
+    ME=MException('MATLAB:CalcPowerWindow','voltage must be a numeric matrix with length > 1');
     throw(ME);
 end
 
 %check that the 2nd input argument is a numeric matrix
 if any([~ismatrix(current),~isnumeric(current),length(current)==1])
-    ME=MException('MATLAB:CalcPowerDC','Current must be a numeric matrix with lenght >1');
+    ME=MException('MATLAB:CalcPowerWindow','Current must be a numeric matrix with lenght >1');
     throw(ME);
 end
 
 %check that the 3rd input argument is a numeric vector
 if any([~isvector(time),~isnumeric(time),length(time)==1])
-    ME=MException('MATLAB:CalcPowerDC','Time must be a numeric vector with lenght >1');
+    ME=MException('MATLAB:CalcPowerWindow','Time must be a numeric vector with lenght >1');
     throw(ME);
 end
 
@@ -103,14 +111,14 @@ time_voltage_compare = voltage_size == time_size;
 
 % check that the current and voltage arrays are of the same size/dimensions
 if ~isequal(current_size,voltage_size)
-    ME=MException('MATLAB:CalcPowerDC','Current and voltage arrays must be same size');
+    ME=MException('MATLAB:CalcPowerWindow','Current and voltage arrays must be same size');
     throw(ME);
 end
 
 % check that time and current/voltage have a dimension of the same length
 
 if any([time_current_compare(1) ~= 1, time_voltage_compare(1) ~= 1])
-    ME=MException('MATLAB:CalcPowerDC','Time input is not same length as current or voltage dimension');
+    ME=MException('MATLAB:CalcPowerWindow','Time input is not same length as current or voltage dimension');
     throw(ME);
 end
 
@@ -122,12 +130,12 @@ if nargin == 7
                 % finding the indices for the specrtal calculations
     startIdx = find(dateTime >= timeRange(1),1);
     if any([isempty(startIdx), (timeRange(1)-dateTime(1))*24*3600 < -1/sampleRate])
-        ME = MException('MATLAB:CalcWaveSpectrumST','start time is not within the range of dateTime');
+        ME = MException('MATLAB:CalcPowerWindow','start time is not within the range of dateTime');
         throw(ME);
     end;
     endIdx   = find(dateTime >= timeRange(2),1);
     if isempty(endIdx)
-       ME = MException('MATLAB:CalcWaveSpectrumST','end time is not within the range of dateTime');
+       ME = MException('MATLAB:CalcPowerWindow','end time is not within the range of dateTime');
        throw(ME);
     end;
    

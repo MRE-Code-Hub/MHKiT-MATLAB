@@ -18,7 +18,7 @@ function powerstats=CalcPowerDC(voltage,current,time,samplerate)
 %        initpowerstats
 %
 % Usage: 
-%    CalcPowerDC(Voltage,current,time)
+%    CalcPowerDC(Voltage,current,time,samplerate)
 %    Calculates the time series of net power for DC
 %    current 
 %

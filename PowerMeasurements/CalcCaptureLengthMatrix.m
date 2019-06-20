@@ -1,4 +1,4 @@
-function capLengthMatrix = CalcCaptureLengthMatrix(capLength,time,Hmo,Te,HmoBinSize,TeBinSize,...
+function [capLengthMatrix,HmoBins,TeBins] = CalcCaptureLengthMatrix(capLength,time,Hmo,Te,HmoBinSize,TeBinSize,...
     HmoStartBin,HmoEndBin,TeStartBin,TeEndBin)
 
 % Calculates the capture length Matrix frollowing the TS 62600-100 standards 
@@ -128,19 +128,19 @@ nHmoBins=(HmoEndBin-HmoStartBin)/HmoBinSize;
 nTeBins=(TeEndBin-TeStartBin)/TeBinSize;
 HmoBins=HmoStartBin:HmoBinSize:HmoEndBin;
 TeBins=TeStartBin:TeBinSize:TeEndBin;
-capLengthMatrix=zeros(nTeBins,nHmoBins,5);
+capLengthMatrix=zeros(length(HmoBins),length(TeBins),5);
 
-for i=1:nTeBins
+for i=1:length(TeBins)
     xTe=(Te > TeBins(i)-TeBinSize & Te <= TeBins(i)+TeBinSize);    
-    for j=1:nHmoBins
+    for j=1:length(HmoBins)
         xHmo=(Hmo > HmoBins(j)-HmoBinSize & Hmo <= HmoBins(j)+HmoBinSize);
         xx=capLength(xHmo==1 & xTe==1);
         if ~isempty(xx)           
-            capLengthMatrix(i,j,1)=mean(capLength(xHmo==1 & xTe==1));
-            capLengthMatrix(i,j,2)=std(capLength(xHmo==1 & xTe==1));            
-            capLengthMatrix(i,j,3)=max(capLength(xHmo==1 & xTe==1));
-            capLengthMatrix(i,j,4)=min(capLength((xHmo==1) & (xTe==1)));
-            capLengthMatrix(i,j,5)=length(capLength(xHmo==1 & xTe==1));
+            capLengthMatrix(j,i,1)=mean(capLength(xHmo==1 & xTe==1));
+            capLengthMatrix(j,i,2)=std(capLength(xHmo==1 & xTe==1));            
+            capLengthMatrix(j,i,3)=max(capLength(xHmo==1 & xTe==1));
+            capLengthMatrix(j,i,4)=min(capLength((xHmo==1) & (xTe==1)));
+            capLengthMatrix(j,i,5)=length(capLength(xHmo==1 & xTe==1));
         end
     end
 end

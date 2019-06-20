@@ -1,6 +1,6 @@
 function captureLength = CalcCaptureLength(power,waveEnergy,time)
 
-% Calculates the capture length frollowing the TS 62600-100 standards 
+% Calculates the capture length following the TS 62600-100 standards 
 %
 % Input:
 %    power                 Time series of measured power (W) of form 
