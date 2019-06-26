@@ -1,6 +1,6 @@
-function J = OmniDirEnergyFlux(waveSpectra,varargin)
+function J = OmniDirEnergyFlux(frequency, spectrum, parameters, varargin)
 
-% J = OmniDirEnergyFlux(waveSpectra,parameters,deepWaterFlag)
+% J = OmniDirEnergyFlux(frequency, spectrum,parameters,deepWaterFlag,'freqBinWidth',freqBinWidth,'k',k)
 %
 % Calculates the omnidirectional wave energy flux based on IEC/TS
 % 62600-100 Ed. 1.0, 2012-08 using equation 5, page 15.
@@ -12,14 +12,18 @@ function J = OmniDirEnergyFlux(waveSpectra,varargin)
 % assumed and equation 8 on page 15 is used.
 %
 % Input:
-%   waveSpectra             MHKiT structure that contains all of the data
-%                           and metadata for the wave spectra calculatione
-%   freqRange (optional)    Two element vector [F1, F2] that bound the
-%                           spectral calculations, where F1 is the lower
-%                           frequency limit and F2 is the upper frequency
-%                           limit
-%   deepWaterFlag (optional)a flag that forces deep water calculations, 
+%   spectrum                spectral desnsity vector of the wave height
+%                           time series (m^2/Hz)
+%   frequency               frequency vector for the spectrum (Hz)
+
+%   parameters              MHKiT structure of various parameters
+%   deepWaterFlag (optional)a flag that forces deep water calculations,
 %                           set flat to 'D' for deep water
+%   freqBinWidth (optional) vector of the frequency width of each spectral
+%                           component. This vector must be the same length
+%                           as the frequency vector. It can me uniformly or
+%                           non-uniformly spaced frequencies
+%   k  (optional)           wave number vector (1/m)
 %
 % Output:
 %   J                             omnidirectional wave energy flux (W/m)
@@ -39,159 +43,168 @@ function J = OmniDirEnergyFlux(waveSpectra,varargin)
 %
 % Version 1, 11/25/2018 Rick Driscoll, NREL and Bradley Ling, Northwest Energy Innovations
 
-if nargin > 3
-    error('OmniDirEnergyFlux: Incorrect number of input arguments, too many agruments, requires 3 at most');
+if nargin > 8
+    ME = MException('MATLAB:OmniDirEnergyFlux','Incorrect number of input arguments, too many agruments, requires 8 at most');
+    throw(ME);
 end;
 
-% checking for the waveSpectra structure to be passed
-if isstruct(waveSpectra)
-    if waveSpectra.structType   ~= 'waveSpectra'
-        error('OmniDirEnergyFlux: Invalid Structure input, first argument must by type waveSpectra');
-    end;
-else
-    error('OmniDirEnergyFlux: Invalid Structure input, first argument must by type waveSpectra');
+% checking that the Spectrum and Fequency are numbers
+if any([isscalar(spectrum), isscalar(frequency),~isnumeric(spectrum), ~isnumeric(frequency)]);
+    ME = MException('MATLAB:OmniDirEnergyFlux','frequency and spectrum must both be vectors');
+    throw(ME);
 end;
 
-% error checking prior to starting script
-% checking the QA flag
-if waveSpectra.qaFlag ~= 0
-    % If the qaFlag isnt zero, dont perform calculation
-    error('OmniDirEnergyFlux: qaFlag for waveSpectra is set');
-end
-
-% checking that the Spectrum and Fequency are vectors
-if (isscalar(waveSpectra.Spectrum) | isscalar(waveSpectra.frequency))
-    error('OmniDirEnergyFlux: one or more inputs are not vectors');
+% checking to see if the Spectrum and Frequency are the same length
+if (length(spectrum) ~= length(frequency))
+    ME = MException('MATLAB:OmniDirEnergyFlux','frequency and spectrum must be the same length');
+    throw(ME);
 end;
 
-% the spectrum and frequency must be the same length
-if length(waveSpectra.Spectrum) ~= length(waveSpectra.frequency)
-    error('OmniDirEnergyFlux: vectors spectrum and frequency must be the same length');
-end;
-
-% check for evenly spaced frequency vector
-x = linspace(waveSpectra.frequency(1),waveSpectra.frequency(end),length(waveSpectra.frequency));
-tmpa = size(waveSpectra.frequency);
-tmpb = size(x);
-if tmpa(1) == tmpb(1);
-    if ~all(abs(waveSpectra.frequency-x)<=abs(eps(x))*2)
-        disp('OmniDirEnergyFlux: frequency vector is not evenly spaced');
-    end;
-else
-    if ~all(abs(waveSpectra.frequency-x')<=abs(eps(x))*2)
-        disp('OmniDirEnergyFlux: frequency vector is not evenly spaced');
-    end;
-end;
+% % check for evenly spaced frequency vector
+% x = linspace(frequency(1),frequency(end),length(frequency));
+% tmpa = size(frequency);
+% tmpb = size(x);
+% if tmpa(1) == tmpb(1);
+%     if ~all(abs(frequency-x)<=abs(eps(x))*2)
+%         ME = MException('MATLAB:OmniDirEnergyFlux','frequency vector is not evenly spaced');
+%         throw(ME);
+%     end;
+% else
+%     if ~all(abs(frequency-x')<=abs(eps(x))*2)
+%         ME = MException('MATLAB:OmniDirEnergyFlux','frequency vector is not evenly spaced');
+%         throw(ME);
+%     end;
+% end;
 
 % checking for positive frequencies
-if any(waveSpectra.frequency < 0)
-    error('OmniDirEnergyFlux: negative frequencies are included in the frequency vector, only postive values are allowed');
+if any(frequency < 0)
+    ME = MException('MATLAB:OmniDirEnergyFlux','negative frequencies are included in the frequency vector, only postive values are allowed');
+    throw(ME);
 end;
 
-if isempty(waveSpectra.environment.waterDensity)
-    error('OmniDirEnergyFlux: Density not specified, using default');
-    waveSpectra.environment.waterDensity    = 1025;
-end;
-if isempty(waveSpectra.environment.g)
-    error('OmniDirEnergyFlux: Gravitational accleration not specified, using default');
-    waveSpectra.environment.g               = 9.81;
-end;
-
-if isempty(waveSpectra.environment.waterDepth)
-    error('OmniDirEnergyFlux: Water depth not specified, using deep water');
-    waveSpectra.environment.waterDepth      = inf;
+% checking to make sure that parameters is a structure
+if isstruct(parameters)
+    % checking for the parameters structure to be passed
+    if ~strcmp(parameters.structType,'Parameters')
+        ME = MException('MATLAB:OmniDirEnergyFlux','Invalid input, parameters must by struture of type Parameters');
+        throw(ME);
+    end;
+else
+    ME = MException('MATLAB:OmniDirEnergyFlux','Invalid input, parameters must by struture of type Parameters');
+    throw(ME);
 end;
 
-% parsing out and assigning the variables from the input arguments
-if nargin > 1
-    for indx = 2:1:nargin
-        % if more than 2 arguments passed, then loop through and parse the
-        % data out of the optional arguments
-        if ~isscalar(varargin{indx-1}) & isvector(varargin{indx-1})
-            % checking to see if the input is the frequency range vector
-            if min(varargin{indx-1}) > 0 & length(varargin{indx-1}) == 2
-                if ~isempty(waveSpectra.props.freqRange)
-                    waveSpectra.props.freqRange = varargin{indx-1};
-                else
-                    error('OmniDirEnergyFlux: freqRange already set, cannot overwrite it');
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% setting the function variables
+waterDepth          = parameters.environemnt.waterDepth;
+waterDensity        = parameters.environemnt.waterDensity;
+g                   = parameters.environemnt.g;
+k                   = [];
+freqBinWidth        = [];
+
+if nargin > 3
+    indx = 4;
+    while indx <= nargin
+        if varargin{indx-3}== 'D'
+            % deep water specified, overwriting the water depth
+            waterDepth = inf;
+            parameters.environemnt.waterDepth = waterDepth;
+            indx = indx +1;
+        elseif strcmp(varargin{indx-3},'freqBinWidth')
+            if all([isnumeric(varargin{indx-2}), length(varargin{indx-2}) > 1])
+                % the vector for k has been passed
+                freqBinWidth = varargin{indx-2};
+                indx = indx +2;
+                % checking that the freqBinWidth is a vector
+                if any([isscalar(freqBinWidth),~isnumeric(freqBinWidth)]);
+                    ME = MException('MATLAB:OmniDirEnergyFlux','freqBinWidth must be a vector of numbers');
+                    throw(ME);
                 end;
                 
-            elseif length(varargin{indx-1}) ~= 2
-                error('OmniDirEnergyFlux: Invalid input argument, freqRange must be a vector of length 2');
+                % checking to see if the Spectrum, Frequency, and freqBinWidth are the same length
+                if (length(spectrum) ~= length(freqBinWidth))
+                    ME = MException('MATLAB:OmniDirEnergyFlux','frequency, spectrum and freqBinWidth must be the same length');
+                    throw(ME);
+                end;  
             else
-                error('OmniDirEnergyFlux: Invalid input argument, freqRange values must be greater than 0');
+                ME = MException('MATLAB:OmniDirEnergyFlux','freqBinWidth must be a vector of numbers');
+                throw(ME);
             end;
-        elseif varargin{indx-1}== 'D'
-            % deep water specified, overwriting the water depth
-            waveSpectra.environment.waterDepth = inf;
-        else
-            error('OmniDirEnergyFlux: Invalid input arguments, unrecongnized flag or input argumjent');
+        elseif strcmp(varargin{indx-3},'k')
+            if all([isnumeric(varargin{indx-2}), length(varargin{indx-2}) > 1])
+                % the vector for k has been passed
+                k = varargin{indx-2};
+                indx = indx +2;
+                % checking that the Spectrum and Fequency are vectors
+                if any([isscalar(k), ~isnumeric(k)]);
+                    ME = MException('MATLAB:OmniDirEnergyFlux','k must be a vector of numbers');
+                    throw(ME);
+                end;
+                
+                % checking to see if the Spectrum and Frequency are the same length
+                if (length(spectrum) ~= length(k))
+                    ME = MException('MATLAB:OmniDirEnergyFlux','frequency, spectrum, and k must be the same length');
+                    throw(ME);
+                end;
+                
+            else
+                ME = MException('MATLAB:OmniDirEnergyFlux','k must be a vector of numbers');
+                throw(ME);
+            end;
         end;
     end;
 end;
 
-% Initalizing commly accessed variables
-h   = waveSpectra.environment.waterDepth;
-rho = waveSpectra.environment.waterDensity;
-g   = waveSpectra.environment.g;
+% if freqBinWidth is not input, assume even frequency spacing
+if isempty(freqBinWidth)
+    % need to check for evenly spaced frequency vector %%******
+    disp('freqBinWidth not specified');
+    freqBinWidth = ones(size(frequency))*mean(diff(frequency));
+end;
+
+
 
 % Calculating the omnidirectional wave energy flux.
-if ~isinf(h)
+if ~isinf(waterDepth)
     % Water depth is specified, so calculate the group velocity based on
     % the specified water depth
     
-    % check to see if h is a valid depth
-    if any([~isreal(h), h < 0])
-        error('OmniDirEnergyFlux: Invalid water depth');
+    % check to see if waterDepth is a valid depth
+    if any([~isreal(waterDepth), waterDepth < 0, ~isnumeric(waterDepth)])
+        ME = MException('MATLAB:OmniDirEnergyFlux','Invalid water depth');
+        throw(ME);
     end
     
-    % determining the first and last index of the specturm to calculate the
-    % omnidirectional wave energy flux
-    if isempty(waveSpectra.props.freqRange)
-        % no frequency range specified, using full range of frequencies,
-        % excluding the first value if its zero
-        disp('no freq range specified');
-        lastIdx = numel(waveSpectra.frequency);
-        if  waveSpectra.frequency(1) ~= 0
-            firstIdx = 1
-        else
-            firstIdx = 2;
-        end;
+    % exclude the first value if its zero
+    if  frequency(1) ~= 0
+        firstIdx = 1;
     else
-        % determining the indices that span the frequency range
-        % finding the first and last index for the frequrency range
-        firstIdx = find(waveSpectra.frequency <= waveSpectra.props.freqRange(1),1,'last');
-        lastIdx  = find(waveSpectra.frequency >= waveSpectra.props.freqRange(2),1,'first');
+        firstIdx = 2;
     end;
     
-    % Calculate wave number
-    waveSpectra.k = waveNumber(waveSpectra);
+    if isempty(k)
+        % Calculate wave number
+        disp('k not specified');
+        k = KfromF(frequency, parameters);
+    end;
     
     % calculating the group velocity, based on IEC TS 62600-100
-    Cp = sqrt(g*tanh(h*waveSpectra.k(firstIdx:lastIdx))./waveSpectra.k(firstIdx:lastIdx));
-    Cg = Cp/2.*(1+(2*h*waveSpectra.k(firstIdx:lastIdx))./sinh(2*h*waveSpectra.k(firstIdx:lastIdx)));
+    Cp = sqrt(g*tanh(waterDepth*k(firstIdx:end))./k(firstIdx:end));
+    Cg = Cp/2.*(1+(2*waterDepth*k(firstIdx:end))./sinh(2*waterDepth*k(firstIdx:end)));
     
     % calculating the wave energy flux
-    J  = rho*g*sum(waveSpectra.bandwidth.*waveSpectra.Spectrum(firstIdx:lastIdx).*Cg);
+    J  = waterDensity*g*sum(freqBinWidth(firstIdx:end).*spectrum(firstIdx:end).*Cg);
+    
 else
     % Deep water calculation, if water depth is not specified, deep water
     % is the default
     
-    if isempty(waveSpectra.stats.Te)
-        %calculating the wave energy period
-        error('OmniDirEnergyFlux: wave energy peroid not specified, terminating');
-        return;
-    else
-        Te = waveSpectra.stats.Te;
-    end;
-    if isempty(waveSpectra.stats.Hm0)
-        % calculating the significant wave height
-        error('OmniDirEnergyFlux: significant wave height not specified, terminating');
-        return;
-    else
-        Hm0 = waveSpectra.stats.Hm0;
-    end;
-    J = rho*g*g/64/pi*Hm0*Hm0*Te;
+    
+    Te = frequencyMoment(frequency, spectrum, freqBinWidth,-1)/frequencyMoment(frequency, spectrum, freqBinWidth,0);
+    Hm0 = 4*sqrt(frequencyMoment(frequency, spectrum, freqBinWidth, 0));
+    J = waterDensity*g*g/64/pi*Hm0*Hm0*Te;
 end;
 
 
