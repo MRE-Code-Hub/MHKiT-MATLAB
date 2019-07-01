@@ -1,55 +1,78 @@
-function [RunIssues,testID, functionOutput] = TestFunction(functionName, numOutPutArgs, testPurpose, RunIssues, testID, varargin);
+function [RunIssues, functionOutput] = TestFunction(functionName, testPurpose, RunIssues, testID, varargin);
 
 
-% building the function call
-if numOutPutArgs == 1
-    functionCall = '[functionOutput] = ';
-else
-    functionCall = [functionCall '['];
-    for ouputIdx = 1:numOutPutArgs
-        if outputIdx == 1
-            functionCall = [functionCall 'functionOutput1'];
+% building the input and output arguments
+input = [];
+output = ['['];
+fnBuildCall = [];
+outputVars = [];
+if nargin > 5
+    for Idx = 5:nargin
+        %check if these are input or output arguments
+        if  strcmp(varargin{Idx-4}, 'output');
+            fnBuildCall = 'output';
+        elseif strcmp(varargin{Idx-4},'input');
+            fnBuildCall = 'input';
         else
-        functionCall = [functionCall ', functionOutput' num2str(outputIdx)];
+            if strcmp(fnBuildCall, 'output');
+                output = [output, varargin{Idx-4}, ','];
+                outputVars = [outputVars, varargin(Idx-4)];
+            elseif strcmp(fnBuildCall,'input');
+                input = [input, 'varargin{' num2str(Idx-4), '},'];
+            else
+                error('input or output identifieers not used in the input agrument to the function call');
+            end;
         end;
     end;
-    functionCall = [functionCall '];'];
-end;
-
-
-functionCall = [functionCall functionName '('];
-if nargin > 6
-    for inputIdx = 6:nargin
-        if inputIdx == 6
-            functionCall = [functionCall 'varargin{' num2str(inputIdx-5), '}'];
-        else
-        functionCall = [functionCall ',varargin{' num2str(inputIdx-5), '}'];
-        end;
+    % building the function call
+    if isempty(output)
+        functionCall = [functionName '('];
+    else
+        % dropping off the last comma
+        output = output(1:length(output)-1);
+        functionCall = [output '] = ' functionName '('];
     end;
+    
+    if isempty(input)
+        functionCall = [functionCall ');'];
+    else
+        % dropping off the last comma
+        input = input(1:length(input)-1);
+        functionCall = [functionCall input ');'];
+    end;
+    
 end;
 
-functionCall = [functionCall ');'];
+%functionCall
 
 try
     CallFail = 0;
     eval(functionCall);
 catch ME
+        %disp('fail');
         eval(['RunIssues.' functionName '.FunctionTest(' num2str(testID), ').success = 0;']);
         eval(['RunIssues.' functionName '.FunctionTest(' num2str(testID), ').type = ''functionRunTest'';']);
+        disp(ME.message)
         eval(['RunIssues.' functionName '.FunctionTest(' num2str(testID), ').message = ''' ME.message ''';']);
-        eval(['RunIssues.' functionName '.FunctionTest(' num2str(testID), ').intendedMessage = ''' message ''';']);
+        %ME.message
         eval(['RunIssues.' functionName '.FunctionTest(' num2str(testID), ').Purpose = ''' testPurpose ''';']);
         eval(['RunIssues.' functionName '.FunctionTest(' num2str(testID), ').issue = ''Did not run'';']);
         CallFail = 1;
 end;
 
 if CallFail == 0;
+        %disp('pass');
         eval(['RunIssues.' functionName '.FunctionTest(' num2str(testID), ').success = 1;']);
         eval(['RunIssues.' functionName '.FunctionTest(' num2str(testID), ').type = ''functionRunTest'';']);
         eval(['RunIssues.' functionName '.FunctionTest(' num2str(testID), ').message = [];']);
-        eval(['RunIssues.' functionName '.FunctionTest(' num2str(testID), ').intendedMessage = [];']);
         eval(['RunIssues.' functionName '.FunctionTest(' num2str(testID), ').Purpose = ''' testPurpose ''';']);
         eval(['RunIssues.' functionName '.FunctionTest(' num2str(testID), ').issue = ''none'';']);
 end;
-% incrementing the testID variable
-testID = testID + 1;
+
+% creating the output variable
+for Idx = 1:length(outputVars)
+    %['functionOutput.' outputVars{Idx} ' = ' outputVars{Idx} ';']
+    eval(['functionOutput.' outputVars{Idx} ' = ' outputVars{Idx} ';']); 
+end;
+%functionOutput
+

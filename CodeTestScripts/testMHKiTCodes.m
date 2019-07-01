@@ -85,11 +85,13 @@ if loadData
         eval(['data.d' num2str(setIdx) '.freqRange = [0.2 2];']);
     end;
 end;
+TDMSFile='/Users/rpauly/Documents/testData/NWEI/NWEI_Offshore_data_20180315/NWEI_OfS_10Hz_data_20180315_0430.tdms';
+outTD=TDMS_getStruct(TDMSFile);
 
 % if the input argument RunTestScripts is not set, the run all of the
 % test scripts
 if isempty(MHKiTTestScripts)
-    MHKiTTestScripts = {'PowerPerformance','WaveResource'};
+    MHKiTTestScripts = {'PowerPerformance','WaveResource','PowerMeasurements'};
 end;
 
 RunIssues = [];
@@ -102,8 +104,13 @@ end;
 
 if any(contains(MHKiTTestScripts,'WaveResource'))
     disp('Running Wave Resource Scripts');
-    RunIssues = testSpectra(data,RunIssues);
+    RunIssues = testSpectra(data,outTD,RunIssues);
 end;
+
+if any(contains(MHKiTTestScripts, 'PowerMeasurements'))
+    disp('Running PowerMeasurements Scripts');
+    RunIssues = testPower(data,outTD,RunIssues);
+end
 
 RunIssues
 % % Specifiying the metadata
