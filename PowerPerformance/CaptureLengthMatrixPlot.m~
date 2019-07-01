@@ -119,13 +119,13 @@ if nargin == 8
         throw(ME);
     end
     
-    if any([maxTe <= minTe])
+    if any([maxTe <= minTe)])
         ME=MException('MATLAB:CaptureLengthMatrixPlot','maxTe needs to be greater than minTe');
         throw(ME);
     end
     
-    if any([maxHmo <= minHmo])
-        ME=MException('MATLAB:CaptureLengthMatrixPlot','maxHmo needs to be greater than minHmo');
+    if any([maxHmo <= minHmo)])
+        ME=MException('MATLAB:CaptureLengthMatrixPlot','maxHmo needs to be greater than minTe');
         throw(ME);
     end
 else
