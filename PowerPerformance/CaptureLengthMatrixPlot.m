@@ -50,9 +50,9 @@ if nargin > 8
     ME = MException('MATLAB:CaptureLengthMatrixPlot','Incorrect number of input arguments, too many arguments, requires at most 8, %d arguments passed',nargin);
     throw(ME);   
 end
-
+si=size(capLenMatrix);
 %check that the 1st input argument is a numeric matrix
-if any([~ismatrix(capLenMatrix),~isnumeric(capLenMatrix),length(capLenMatrix)==1])
+if any([~ismatrix(capLenMatrix),~isnumeric(capLenMatrix),length(capLenMatrix)==1,si(1)<=1, si(2)<=1])
     ME=MException('MATLAB:CaptureLengthMatrixPlot','capLenMatrix must be a numeric matrix with lenght >1');
     throw(ME);
 end
