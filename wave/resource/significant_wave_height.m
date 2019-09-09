@@ -1,4 +1,4 @@
-function H=significant_wave_height(S)
+function Hm0=significant_wave_height(S)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Calculates wave height from spectra
@@ -7,6 +7,12 @@ function H=significant_wave_height(S)
 %     ------------
 %     S: pandas DataFrame
 %         Spectral Density (m^2/Hz)
+%        OR
+%        wave_spectra structure of form
+%        wave_spectra.spectrum=Spectral Density (m^2-s;
+%         wave_spectra.type=String of the spectra type, i.e. Bretschneider, 
+%                time series, date stamp etc. ;
+%         wave_spectra.frequency= frequency (Hz);
 %         
 %     Returns
 %     ---------
@@ -32,11 +38,17 @@ if count(P,'modpath') == 0
 end
 
 py.importlib.import_module('mhkit');
-py.importlib.import_module('pandas_dataframe');
+%py.importlib.import_module('pandas_dataframe');
 
 if (isa(S,'py.pandas.core.frame.DataFrame')~=1)
-    ME = MException('MATLAB:significant_wave_height','S needs to be a Pandas dataframe, use py.pandas_dataframe.spectra_to_pandas to create one');
-    throw(ME);
+    if (isstruct(S)==1)
+        S=py.pandas_dataframe.spectra_to_pandas(S.frequency,S.spectrum);
+        disp(S);
+    else
+        ME = MException('MATLAB:significant_wave_height','S needs to be a Pandas dataframe, use py.pandas_dataframe.spectra_to_pandas to create one');
+        throw(ME);
+    end
 end
 
-H=py.mhkit.wave.resource.significant_wave_height(S);
+Hm0=py.mhkit.wave.resource.significant_wave_height(S);
+Hm0=double(Hm0.values);
