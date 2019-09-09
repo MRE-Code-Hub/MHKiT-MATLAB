@@ -69,7 +69,9 @@ else
 end
 
 wave_spectra.spectrum=double(S.values);
-wave_spectra.type=S.index.values(1);
+char_arr=char(S.index.values);
+indchar=strfind(char_arr,',');
+wave_spectra.type=char_arr(3:indchar(1)-1);
 wave_spectra.frequency=double(S.columns.values);
 wave_spectra.Tp=Tp;
 if nargin == 4 
