@@ -1,4 +1,4 @@
-function spectra=elevation_spectrum(ts,sampleRate,nnft,time)
+function wave_spectra=elevation_spectrum(ts,sampleRate,nnft,time)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % spectra=elevation_spectrum(ts,sampleRate,nnft)
@@ -10,7 +10,7 @@ function spectra=elevation_spectrum(ts,sampleRate,nnft,time)
 %     sampleRate: float
 %         Data frequency (Hz)
 %     nnft: int
-%     time: float (s)
+%     time: epoch time (s)
 %     
 %     Returns
 %     ---------
@@ -43,4 +43,12 @@ py.importlib.import_module('pandas_dataframe');
 
 nnft=int32(nnft);
 spectra=py.mhkit.wave.resource.elevation_spectrum(ts,sampleRate,nnft);
+
+wave_spectra.spectrum=double(spectra.values);
+
+wave_spectra.type='Spectra from Timeseries';
+wave_spectra.frequency=double(spectra.columns.values);
+wave_spectra.sampleRate=sampleRate;
+wave_spectra.nnft=nnft;
+
     

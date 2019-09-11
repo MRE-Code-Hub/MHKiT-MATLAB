@@ -16,7 +16,7 @@ function Hm0=significant_wave_height(S)
 %         
 %     Returns
 %     ---------
-%     Hm0: pandas Series 
+%     Hm0: double 
 %         Significant Wave Height (m)
 %    From
 %     # Eq 12 in IEC 62600-101
