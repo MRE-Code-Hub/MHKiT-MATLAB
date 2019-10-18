@@ -13,7 +13,7 @@ function figure=plot_spectrum(wave_spectra)
 %         
 %     Returns
 %     ---------
-%     figure: figure
+%     figure: matplotlib pyplot figure
 %         Plot of wave amplitude spectra versus omega
 %     
 %     """

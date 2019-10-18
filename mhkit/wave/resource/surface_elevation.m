@@ -1,7 +1,7 @@
-function Te=energy_period(S)
+function eta=surface_elevation(S,time_index)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 
+% Calculates time-series of wave amplitude from spectrum using random phase
 %    
 %    Parameters
 %    ------------
@@ -16,10 +16,14 @@ function Te=energy_period(S)
 %                time series, date stamp etc. ;
 %         wave_spectra.frequency= frequency (Hz);
 %
+%    Optional Parameters
+%    -------------------
+%    seed: random seed
+%     
 %    Returns
 %    ---------
-%    Te float
-%        Wave energy Period (s)
+%    eta: pandas DataFrame
+%         Wave surface elevation (m)
 %
 %    Dependancies 
 %    -------------
@@ -50,4 +54,17 @@ if (isa(S,'py.pandas.core.frame.DataFrame')~=1)
     end
 end
 
-Te=py.mhkit.wave.resource.energy_period(S);
+ if nargin == 4 
+     seed=varagin{1};
+     eta=py.mhkit_wave_resource.surface_elevation(S,time_index,seed);
+ else
+eta=py.mhkit.wave.resource.surface_elevation(S,time_index);
+ end
+%disp(type(eta.values))
+wave_spectra.surface_elevation=uint32(eta.values);
+
+wave_spectra.type='Time Series from Spectra';
+wave_spectra.time=eta.columns;
+
+    
+    
