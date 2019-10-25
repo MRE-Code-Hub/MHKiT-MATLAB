@@ -21,8 +21,8 @@ function m=frequency_moment(S,N)
 %
 %    Returns
 %    ---------
-%    m: pandas DataFrame 
-%        Frequency Moment per spectrum
+%    m: double 
+%        
 %
 %    Dependancies 
 %    -------------
