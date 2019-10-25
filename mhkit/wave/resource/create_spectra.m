@@ -1,4 +1,4 @@
-function wave_spectra=create_spectra(spectraType,frequency,Tp,varargin)
+function wave_spectra=create_spectra(spectra_type,frequency,Tp,varargin)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % spectra,spectra_type,frequency=create_spectra(spectraType,frequency,Tp,varagin)
@@ -49,17 +49,17 @@ if (isa(frequency,'py.numpy.ndarray') ~= 1)
     frequency = py.numpy.array(frequency);
 end
 
-if strcmp(spectraType,'pierson_moskowitz_spectrum')
+if strcmp(spectra_type,'pierson_moskowitz_spectrum')
     S=py.mhkit.wave.resource.pierson_moskowitz_spectrum(frequency,Tp);
     
-elseif strcmp(spectraType,'bretschneider_spectrum')
+elseif strcmp(spectra_type,'bretschneider_spectrum')
     if nargin ~= 4
          ME = MException('MATLAB:create_spectra','Hs is needed for bretschneider_spectrum');
          throw(ME);
     end
     S=py.mhkit.wave.resource.bretschneider_spectrum(frequency,Tp,varargin{1});
 
-elseif strcmp(spectraType,'jonswap_spectrum')
+elseif strcmp(spectra_type,'jonswap_spectrum')
     if nargin ~= 4
          ME = MException('MATLAB:create_spectra','Hs is needed for jonswap_spectrum');
          throw(ME);
@@ -71,11 +71,10 @@ else
     throw(ME);
 end
 
-wave_spectra.spectrum=double(S.values);
+wave_spectra.spectrum=double(py.array.array('d',py.numpy.nditer(S.values)));
 char_arr=char(S.index.values);
-indchar=strfind(char_arr,',');
-wave_spectra.type=char_arr(3:indchar(1)-1);
-wave_spectra.frequency=double(S.columns.values);
+wave_spectra.type=spectra_type;
+wave_spectra.frequency=double(py.array.array('d',py.numpy.nditer(S.index)));
 wave_spectra.Tp=Tp;
 if nargin == 4 
     wave_spectra.Hs=varargin{1};
