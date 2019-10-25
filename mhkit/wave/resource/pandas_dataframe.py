@@ -31,10 +31,10 @@ def spectra_to_pandas(frequency,spectra):
     df=pd.DataFrame(data=spectra.T,index=frequency)
     df.indexname='(Hz)'
     c_name=['PM']
-    for i in range(0,len(df.columns)-1):
-        c_name.append('PM')
-    df.columns=c_name
-    return df.T
+    #for i in range(0,len(df.columns)-1):
+    #    c_name.append('PM')
+    #df.columns=c_name
+    return df
     
     
 
