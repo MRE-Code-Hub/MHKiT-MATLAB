@@ -1,4 +1,4 @@
-function eta=surface_elevation(S,time_index)
+function wave_elevation=surface_elevation(S,time_index)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Calculates time-series of wave amplitude from spectrum using random phase
@@ -15,10 +15,13 @@ function eta=surface_elevation(S,time_index)
 %         wave_spectra.type=String of the spectra type, i.e. Bretschneider, 
 %                time series, date stamp etc. ;
 %         wave_spectra.frequency= frequency (Hz);
-%
+%    time_index: array
+%        Time used to create the wave elevation time series [s],
+%        
 %    Optional Parameters
 %    -------------------
-%    seed: random seed
+%    seed: Int
+%        random seed
 %     
 %    Returns
 %    ---------
@@ -42,7 +45,11 @@ if count(P,'modpath') == 0
 end
 
 py.importlib.import_module('mhkit');
-%py.importlib.import_module('pandas_dataframe');
+py.importlib.import_module('numpy');
+
+if (isa(time_index,'py.numpy.ndarray') ~= 1)
+    time_index = py.numpy.array(time_index);
+end
 
 if (isa(S,'py.pandas.core.frame.DataFrame')~=1)
     if (isstruct(S)==1)
@@ -58,13 +65,23 @@ end
      seed=varagin{1};
      eta=py.mhkit_wave_resource.surface_elevation(S,time_index,seed);
  else
-eta=py.mhkit.wave.resource.surface_elevation(S,time_index);
+     eta=py.mhkit.wave.resource.surface_elevation(S,time_index);
  end
-%disp(type(eta.values))
-wave_spectra.surface_elevation=uint32(eta.values);
 
-wave_spectra.type='Time Series from Spectra';
-wave_spectra.time=eta.columns;
+vals=double(py.array.array('d',py.numpy.nditer(eta.values)));
+ sha=cell(eta.values.shape);
+ x=int64(sha{1,1});
+ y=int64(sha{1,2});
+ vals=reshape(vals,[x,y]);
+
+si=size(vals);
+for i=1:si(2)
+   wave_elevation.spectrum{i}=vals(:,i);
+end
+
+wave_elevation.type='Time Series from Spectra';
+
+wave_elevation.time=double(py.array.array('d',py.numpy.nditer(eta.index)));
 
     
     

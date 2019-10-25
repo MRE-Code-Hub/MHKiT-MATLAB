@@ -17,6 +17,8 @@ function wave_spectra=create_spectra(spectra_type,frequency,Tp,varargin)
 %     -------------------
 %     Hs: float - Required for 'bretschneider_spectrum', and 'jonswap_spectrum'
 %         Significant Wave Height (s)
+%    gamma: float
+%         only an optional parameter for 'jonswap_spectrum'
 %     
 %     Returns
 %     ---------
@@ -50,7 +52,12 @@ if (isa(frequency,'py.numpy.ndarray') ~= 1)
 end
 
 if strcmp(spectra_type,'pierson_moskowitz_spectrum')
-    S=py.mhkit.wave.resource.pierson_moskowitz_spectrum(frequency,Tp);
+    if nargin ==3
+        S=py.mhkit.wave.resource.pierson_moskowitz_spectrum(frequency,Tp);
+    else
+        ME = MException('MATLAB:create_spectra','inncorrect number of arguments');
+         throw(ME);
+    end
     
 elseif strcmp(spectra_type,'bretschneider_spectrum')
     if nargin ~= 4
@@ -60,11 +67,17 @@ elseif strcmp(spectra_type,'bretschneider_spectrum')
     S=py.mhkit.wave.resource.bretschneider_spectrum(frequency,Tp,varargin{1});
 
 elseif strcmp(spectra_type,'jonswap_spectrum')
-    if nargin ~= 4
+    if nargin < 4
          ME = MException('MATLAB:create_spectra','Hs is needed for jonswap_spectrum');
          throw(ME);
+    elseif nargin == 4
+        S=py.mhkit.wave.resource.jonswap_spectrum(frequency,Tp,varargin{1});
+    elseif nargin == 5 
+        S=py.mhkit.wave.resource.jonswap_spectrum(frequency,Tp,varargin{1},pyargs('gamma',varargin{2}));
+    else
+        ME = MException('MATLAB:create_spectra','to many input arguments');
+         throw(ME);
     end
-    S=py.mhkit.wave.resource.jonswap_spectrum(frequency,Tp,varargin{1});
 
 else 
     ME = MException('MATLAB:create_spectra','Not a Valid Spectrum Type');
