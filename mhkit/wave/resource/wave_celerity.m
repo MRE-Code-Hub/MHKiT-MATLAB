@@ -10,13 +10,12 @@ function Cg=wave_celerity(k,h,varargin)
 %       To make a pandas data frame from user supplied frequency and spectra
 %       use py.pandas_dataframe.spectra_to_pandas(frequency,spectra)
 %        OR
-%        wave_spectra structure of form
-%        wave_spectra.spectrum=Spectral Density (m^2-s;
-%         wave_spectra.type=String of the spectra type, i.e. Bretschneider, 
-%                time series, date stamp etc. ;
-%         wave_spectra.frequency= frequency (Hz);
+%        k structure of form
+%        k.values= wave number
+%        k.frequency= frequency (Hz);
 %    h: float
 %         Water depth (m)
+
 %
 %     Optional 
 %     ---------
@@ -50,7 +49,7 @@ py.importlib.import_module('mhkit');
 
 if (isa(k,'py.pandas.core.frame.DataFrame')~=1)
     if (isstruct(k)==1)
-        k=py.pandas_dataframe.spectra_to_pandas(k.frequency,py.numpy.array(k.spectrum));
+        k=py.pandas_dataframe.spectra_to_pandas(k.frequency,py.numpy.array(k.values));
         
     else
         ME = MException('MATLAB:wave_celerity','S needs to be a Pandas dataframe, use py.pandas_dataframe.spectra_to_pandas to create one');
@@ -68,5 +67,6 @@ else
 end
 
 
-Cg.values=double(Cgdf.values);
-Cg.frequency=double(Cgdf.index);
+Cg.values=double(py.array.array('d',py.numpy.nditer(Cgdf.values)));
+Cg.frequency=double(py.array.array('d',py.numpy.nditer(Cgdf.index)));
+Cg.h=h;
