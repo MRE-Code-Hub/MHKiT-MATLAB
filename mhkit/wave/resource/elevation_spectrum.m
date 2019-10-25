@@ -1,4 +1,4 @@
-function wave_spectra=elevation_spectrum(ts,sampleRate,nnft,time)
+function wave_spectra=elevation_spectrum(ts,sample_rate,nnft,time,varargin)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % spectra=elevation_spectrum(ts,sampleRate,nnft)
@@ -6,16 +6,31 @@ function wave_spectra=elevation_spectrum(ts,sampleRate,nnft,time)
 %    
 %     Parameters
 %     ------------
-%     ts: Wave probe time-series data
+%     ts: Wave probe time-series data, with each column a differen time
+%           series
 %     sampleRate: float
-%         Data frequency (Hz)
+%           Data frequency (Hz)
 %     nnft: int
 %     time: epoch time (s)
-%     
+%
+%     Optional
+%     ---------
+%     window: string scalar 
+%        Signal window type. 'hamming' is used by default given the broadband 
+%        nature of waves. See scipy.signal.get_window for more options.
+%     detrend: logical
+%        Specifies if a linear trend is removed from the data before calculating 
+%        the wave energy spectrum.  Data is detrended by default.
+%
 %     Returns
 %     ---------
-%     S: pandas DataFrame 
-%         Spectral Density (m^2/Hz) per probe
+%     wave_spectra: structure 
+%         wave_spectra.spectrum: cell array
+%            Spectral Density (m^2/Hz) per probe
+%         wave_spectra.type: 'Spectra from Time Series'
+%         wave_spectra.frequency: frequency [Hz] 
+%         wave_spectra.sample_rate: sample_rate
+%         wave_spectra.nnft: nnft
 %
 %     Dependancies 
 %     -------------
@@ -28,42 +43,65 @@ function wave_spectra=elevation_spectrum(ts,sampleRate,nnft,time)
 
 [own_path,~,~] = fileparts(mfilename('fullpath'));
 modpath= fullfile(own_path, '...');
- P = py.sys.path;
- if count(P,'modpath') == 0
-     insert(P,int32(0),'modpath');
- end
+P = py.sys.path;
+if count(P,'modpath') == 0
+    insert(P,int32(0),'modpath');
+end
 
 py.importlib.import_module('mhkit');
 py.importlib.import_module('pandas_dataframe');
 py.importlib.import_module('numpy');
-disp('in');
- x=size(ts);
-%     ts_dict=py.dict();
-li=py.list(ts(:,1));
-if x(2)>1 
-    
-     for i = 2:x(2)
-         li=py.list({li,py.list(ts(:,i))})
-%         j=string(i);
-%         dict_u=py.dict(pyargs(j,ts(:,i)));
-%         ts_dict=py.dict(pyargs(**ts_dict,**dict_u));
-     end
-end
-%ts=py.numpy.asarray(ts.');
-disp('sucess')
 if (isa(ts,'py.pandas.core.frame.DataFrame')~=1)
+    x=size(ts);
+    li=py.list(ts(:,1));
+    if x(2)>1 
+        for i = 2:x(2)
+            li=py.list({li,py.list(ts(:,i))});
+        end
+    end
     ts=py.pandas_dataframe.timeseries_to_pandas(li,time,int32(x(2)));
 end
-
 nnft=int32(nnft);
-ts
-spectra=py.mhkit.wave.resource.elevation_spectrum(ts,sampleRate,nnft);
+if nargin > 4
+    if nargin > 6
+        ME = MException('MATLAB:elevation_spectrum','Incorrect number of input arguments, too many agruments, requires 6 at most, %d arguments passed',nargin);
+        throw(ME);
+    
+    elseif nargin == 5
+        if any(isStringScalar(varargin{1}))
+            spectra=py.mhkit.wave.resource.elevation_spectrum(ts,sample_rate,nnft,pyargs('window',varargin{1}));
+        end
+        if any([varargin{1}==true, varargin{1}==false])
+            spectra=py.mhkit.wave.resource.elevation_spectrum(ts,sample_rate,nnft,pyargs('detrend',varargin{1}));
+        end
+        
+    elseif any(isStringScalar(varargin{1})) & any([varargin{2}==true, varargin{2}==false])
+        spectra=py.mhkit.wave.resource.elevation_spectrum(ts,sample_rate,nnft,pyargs('window',varargin{1},'detrend',varargin{2}));
+    elseif any(isStringScalar(varargin{2})) & any([varargin{1}==true, varargin{1}==false])
+        spectra=py.mhkit.wave.resource.elevation_spectrum(ts,sample_rate,nnft,pyargs('window',varargin{2}, 'detrend',varargin{1}));
+    else
+        ME = MException('MATLAB:elevation_spectrum','One or more optional argument is of the wrong type');
+        throw(ME);
+    end
+else
+    spectra=py.mhkit.wave.resource.elevation_spectrum(ts,sample_rate,nnft);
+end
 
-wave_spectra.spectrum=double(py.array.array('d',py.numpy.nditer(spectra.values)));
 
+ vals=double(py.array.array('d',py.numpy.nditer(spectra.values)));
+ sha=cell(spectra.values.shape);
+ x=int64(sha{1,1});
+ y=int64(sha{1,2});
+ vals=reshape(vals,[x,y]);
+
+si=size(vals);
+for i=1:si(2)
+   wave_spectra.spectrum{i}=vals(:,i);
+end
 wave_spectra.type='Spectra from Timeseries';
-wave_spectra.frequency=double(py.array.array('d',py.numpy.nditer(spectra.columns.values)));
-wave_spectra.sampleRate=sampleRate;
+disp(spectra.index)
+wave_spectra.frequency=double(py.array.array('d',py.numpy.nditer(spectra.index)));
+wave_spectra.sample_rate=sample_rate;
 wave_spectra.nnft=nnft;
 
     
