@@ -1,4 +1,4 @@
-function wave_elevation=surface_elevation(S,time_index)
+function wave_elevation=surface_elevation(S,time_index,varargin)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Calculates time-series of wave amplitude from spectrum using random phase
@@ -63,7 +63,7 @@ end
 
  if nargin == 4 
      seed=varagin{1};
-     eta=py.mhkit_wave_resource.surface_elevation(S,time_index,seed);
+     eta=py.mhkit_wave_resource.surface_elevation(S,time_index,pyargs('seed',seed));
  else
      eta=py.mhkit.wave.resource.surface_elevation(S,time_index);
  end
