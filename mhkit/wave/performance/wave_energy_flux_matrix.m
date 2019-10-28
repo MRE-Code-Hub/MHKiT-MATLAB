@@ -1,4 +1,4 @@
-function clm=capture_length_matrix(Hm0,Te,L,statistic,Hm0_bins,Te_bins)
+function WEFM=wave_energy_flux_matrix(Hm0,Te,J,statistic,Hm0_bins,Te_bins)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
@@ -13,8 +13,8 @@ function clm=capture_length_matrix(Hm0,Te,L,statistic,Hm0_bins,Te_bins)
 %         Significant wave height from spectra [m]
 %     Te: numpy array or vector
 %         Energy period from spectra [s]
-%     L : numpy array or vector
-%         Capture length [m]
+%     J : numpy array or vector
+%         wave energy flux from spectra [W/m]
 %     statistic: string
 %         Statistic for each bin, options include: 'mean', 'std', 'median', 
 %         'count', 'sum', 'min', 'max', and 'frequency'.  Note that 'std' uses 
@@ -26,8 +26,7 @@ function clm=capture_length_matrix(Hm0,Te,L,statistic,Hm0_bins,Te_bins)
 %         
 %     Returns
 %     ---------
-%     clm: structure
-%         
+%     WEFM: Structure
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -42,20 +41,19 @@ py.importlib.import_module('mhkit');
 
 Hm0=py.numpy.array(Hm0);
 Te=py.numpy.array(Te);
-L=py.numpy.array(L);
+J=py.numpy.array(J);
 Hm0_bins=py.numpy.array(Hm0_bins);
 Te_bins=py.numpy.array(Te_bins);
 
-LM=py.mhkit.wave.device.capture_length_matrix(Hm0,Te,L,statistic,Hm0_bins,Te_bins);
-vals=double(py.array.array('d',py.numpy.nditer(LM.values)));
-sha=cell(LM.values.shape);
+JM=py.mhkit.wave.device.wave_energy_flux_matrix(Hm0,Te,J,statistic,Hm0_bins,Te_bins);
+vals=double(py.array.array('d',py.numpy.nditer(JM.values)));
+sha=cell(JM.values.shape);
 x=int64(sha{1,1});
 y=int64(sha{1,2});
 vals=reshape(vals,[y,x]);
 vals=transpose(vals);
 
-clm.values=vals;
-clm.stat=statistic;
-clm.Hm0_bins=double(Hm0_bins);
-clm.Te_bins=double(Te_bins);
- 
+WEFM.values=vals;
+WEFM.stat=statistic;
+WEFM.Hm0_bins=double(Hm0_bins);
+WEFM.Te_bins=double(Te_bins);
