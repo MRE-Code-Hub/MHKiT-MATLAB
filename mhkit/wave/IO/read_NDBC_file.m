@@ -60,27 +60,25 @@ datapd=datac{1};
 disp(datapd)
 xx=cell(datapd.axes);
 v=xx{2};
-%v=cell(v.values);
+
 
 vv=cell(py.list(py.numpy.nditer(v.values,pyargs("flags",{"refs_ok"}))));
 
-
-% cols=datapd.blocks;
-% x=struct(cols);
-% %disp(x(2))
-% datamet=struct2cell(struct(datac{2}));
-% %disp(datamet{2})
 vals=double(py.array.array('d',py.numpy.nditer(datapd.values)));
 sha=cell(datapd.values.shape);
 x=int64(sha{1,1});
 y=int64(sha{1,2});
 
 vals=reshape(vals,[x,y]);
-
+ti=cell(py.list(py.numpy.nditer(datapd.index)));
+siti=size(ti)
 si=size(vals);
  for i=1:si(2)
     test=string(py.str(vv{i}));
     
     datast.(test)=vals(:,i);
+ end
+ for i=1:siti(2)
+    datast.time{i}=string(py.str(ti{i}));
  end
 
