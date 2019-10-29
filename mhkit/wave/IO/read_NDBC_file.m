@@ -1,4 +1,4 @@
-function NDBC_data=read_NDBC_file(file_name,vargin)
+function datast=read_NDBC_file(file_name,varargin)
 
 %%%%%%%%%%%%%%%%%%%%
 %  Reads a NDBC wave buoy data file (from https://www.ndbc.noaa.gov) into a
@@ -47,9 +47,40 @@ py.importlib.import_module('numpy');
 
 if nargin == 2
     missing=py.list(varagin{1});
-    data,meta=py.mhkit.wave.IO.read_NDBC_file(file_name,missing);
+    datatp=py.mhkit.wave.io.read_NDBC_file(file_name,missing);
 elseif nargin > 2
     ME = MException('MATLAB:read_NDBC_file','too many arguments passed');
     throw(ME);
 else
-    data,meta=py.mhkit.wave.IO.read_NDBC_file(file_name);
+    datatp=py.mhkit.wave.io.read_NDBC_file(file_name);
+end
+
+datac=cell(datatp);
+datapd=datac{1};
+disp(datapd)
+xx=cell(datapd.axes);
+v=xx{2};
+%v=cell(v.values);
+
+vv=cell(py.list(py.numpy.nditer(v.values,pyargs("flags",{"refs_ok"}))));
+
+
+% cols=datapd.blocks;
+% x=struct(cols);
+% %disp(x(2))
+% datamet=struct2cell(struct(datac{2}));
+% %disp(datamet{2})
+vals=double(py.array.array('d',py.numpy.nditer(datapd.values)));
+sha=cell(datapd.values.shape);
+x=int64(sha{1,1});
+y=int64(sha{1,2});
+
+vals=reshape(vals,[x,y]);
+
+si=size(vals);
+ for i=1:si(2)
+    test=string(py.str(vv{i}));
+    
+    datast.(test)=vals(:,i);
+ end
+
