@@ -57,7 +57,11 @@ end
 
 datac=cell(datatp);
 datapd=datac{1};
-disp(datapd)
+
+datamat=datac{2};
+matstr=struct(datamat);
+disp(datamat)
+
 xx=cell(datapd.axes);
 v=xx{2};
 
@@ -71,12 +75,14 @@ y=int64(sha{1,2});
 
 vals=reshape(vals,[x,y]);
 ti=cell(py.list(py.numpy.nditer(datapd.index)));
-siti=size(ti)
+siti=size(ti);
 si=size(vals);
  for i=1:si(2)
     test=string(py.str(vv{i}));
+    unit=string(matstr.(test));
     
     datast.(test)=vals(:,i);
+    datast.units.(test)=unit;
  end
  for i=1:siti(2)
     datast.time{i}=string(py.str(ti{i}));
