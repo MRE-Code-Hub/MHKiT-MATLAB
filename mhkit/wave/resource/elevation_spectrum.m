@@ -49,17 +49,21 @@ if count(P,'modpath') == 0
 end
 
 py.importlib.import_module('mhkit');
-py.importlib.import_module('pandas_dataframe');
 py.importlib.import_module('numpy');
 if (isa(ts,'py.pandas.core.frame.DataFrame')~=1)
     x=size(ts);
-    li=py.list(ts(:,1));
+    li=py.list();
     if x(2)>1 
-        for i = 2:x(2)
-            li=py.list({li,py.list(ts(:,i))});
+        for i = 1:x(2)
+            app=py.list(ts(:,i));
+            li=py.pandas_dataframe.lis(li,app);
+            
         end
-    end
     ts=py.pandas_dataframe.timeseries_to_pandas(li,time,int32(x(2)));
+    elseif x(2)==1
+       ts=py.pandas_dataframe.timeseries_to_pandas(ts,time,int32(x(2))); 
+    end
+    
 end
 nnft=int32(nnft);
 if nargin > 4
@@ -99,7 +103,7 @@ for i=1:si(2)
    wave_spectra.spectrum{i}=vals(:,i);
 end
 wave_spectra.type='Spectra from Timeseries';
-disp(spectra.index)
+
 wave_spectra.frequency=double(py.array.array('d',py.numpy.nditer(spectra.index)));
 wave_spectra.sample_rate=sample_rate;
 wave_spectra.nnft=nnft;
