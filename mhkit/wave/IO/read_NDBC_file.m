@@ -27,12 +27,12 @@ function datast=read_NDBC_file(file_name,varargin)
 %     
 %     Returns
 %     ---------
-%     data: pandas DataFrame 
-%         Data indexed by datetime with columns named according to header row 
+%     data: Structure 
+%         Data: named according to header row 
+%         time: given in datetime 
+%         units: the units for each data entry
 %         
-%     metadata: dict or None
-%         Dictionary with {column name: units} key value pairs when the NDBC file  
-%         contains unit information, otherwise None is returned
+
 
 [own_path,~,~] = fileparts(mfilename('fullpath'));
 modpath= fullfile(own_path);
@@ -60,7 +60,7 @@ datapd=datac{1};
 
 datamat=datac{2};
 matstr=struct(datamat);
-disp(datamat)
+
 
 xx=cell(datapd.axes);
 v=xx{2};
@@ -85,6 +85,6 @@ si=size(vals);
     datast.units.(test)=unit;
  end
  for i=1:siti(2)
-    datast.time{i}=string(py.str(ti{i}));
+    datast.time{i}=datetime(string(py.str(ti{i})),'InputFormat','yyyy-MM-dd''T''HH:mm:ss.SSSSSSSSS');
  end
 
