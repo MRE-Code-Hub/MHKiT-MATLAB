@@ -1,39 +1,75 @@
-function EP=exceedance_probability(D,varagin)
+function EP=exceedance_probability(D)
 
-% Calculates the exceedance probability 'f'. Returns for 10 years of
-%     daily discharge data.
-%     
+% Calculates the exceedance probability
+    
 %     Parameters
 %     ----------
-%     D : DataFrame 
-%         Pandas DataFrame with Index of type DateTimeIndex and column
-%         of discharge.
-%     Optional
-%     key : string
-%         Optional parameter for use when passing a dataframe with
-%         multiple parameters to specify the column to sort and calculate
-%         on.
-%     force_daily_index : bool
-%         FDC calculation requires 10 years of daily data. If you want
-%         to bypass the daily data requirement set to False.
-%     append : bool
-%         Changes the function return. If False the exceedence probability
-%         'f' is returned. If True a new DataFrame is returned sorted by 
-%         exceedence probability with F appended in the DataFrame.
+%     D : pandas DataFrame  
+%               Discharge data [m^3/s] indexed by time [datetime].  Note that 
+%               river resource calculations require 10 years of daily data.
+%         or Structure
+%               D.Discharge
+%               D.time in epoch time(s)
 %         
-% 
 %     Returns   
 %     -------
-%     f: array or DataFrame 
-%         Exceedance probability [unitless]. If append=True the original
-%         dataframe is returned with F appended to it but sorted by f.
-% 
-%     Examples
-%     --------
-%     >>> # Use USGS module to import 10 year daily discharge data
-%     >>> data = river.io.usgs_data("15515500")
-%     >>> df = river.io.usgs_data_to_df(data, data_key='discharge')
-%     >>> # Convert to m3/s
-%     >>> df.discharge = df.discharge / (3.28084)**3
-%     >>> # Calculate the exceedence probability f. and append to df
-%     >>> df = river.resource.exceedance_probability(df, append=True)
+%     EP : Structure     
+%         Exceedance probability [unitless] indexed by time [epoch time (s)]
+
+[own_path,~,~] = fileparts(mfilename('fullpath'));
+modpath= fullfile(own_path, '...');
+P = py.sys.path;
+if count(P,'modpath') == 0
+    insert(P,int32(0),'modpath');
+end
+
+py.importlib.import_module('mhkit');
+
+if (isa(D,'py.pandas.core.frame.DataFrame')~=1)
+    x=size(D.Discharge);
+    li=py.list();
+    if x(2)>1 
+        for i = 1:x(2)
+            app=py.list(D.Discharge(:,i));
+            li=py.pandas_dataframe.lis(li,app);
+            
+        end
+    elseif x(2) ==1 
+        li=D.Discharge;
+    end
+    
+    if any(isdatetime(D.time{1}))
+        si=size(D.time);
+        for i=1:si(2)
+        D.time{i}=posixtime(D.time{i});
+        end
+    end
+    D=py.pandas_dataframe.timeseries_to_pandas(li,D.time,int32(x(2)));
+end
+
+EPpd=py.mhkit.river.resource.exceedance_probability(D);
+
+xx=cell(EPpd.axes);
+v=xx{2};
+vv=cell(py.list(py.numpy.nditer(v.values,pyargs("flags",{"refs_ok"}))));
+
+vals=double(py.array.array('d',py.numpy.nditer(EPpd.values)));
+sha=cell(EPpd.values.shape);
+x=int64(sha{1,1});
+y=int64(sha{1,2});
+
+vals=reshape(vals,[x,y]);
+
+si=size(vals);
+ for i=1:si(2)
+    test=string(py.str(vv{i}));
+    newname=split(test,",");
+    
+    EP.(newname(1))=vals(:,i);
+    
+ end
+ EP.time=double(py.array.array('d',py.numpy.nditer(EPpd.index)));
+
+
+
+
