@@ -1,4 +1,4 @@
-function polynomial_coefficients=polynomial_fit(x,y,n)
+function poly=polynomial_fit(x,y,n)
 
 % Returns a polynomial fit for y given x of order n.
 % 
@@ -13,8 +13,9 @@ function polynomial_coefficients=polynomial_fit(x,y,n)
 % 
 %     Returns
 %     ==========
-%     polynomial_coefficients : list
-%     list of polynomial coefficients
+%     poly: structure
+%       coef: polynomial coefficients 
+%       fit: fit coefficients 
 
 [own_path,~,~] = fileparts(mfilename('fullpath'));
 modpath= fullfile(own_path, '...');
@@ -24,5 +25,16 @@ if count(P,'modpath') == 0
 end
 
 py.importlib.import_module('mhkit');
+x=py.numpy.array(x);
+y=py.numpy.array(y);
+n=int32(n);
 
-polynomial_coefficients=py.mhkit.river.resource.polynomial_fit(x,y,n);
+polyt=py.mhkit.river.resource.polynomial_fit(x,y,n);
+
+polyc=cell(polyt);
+coef=polyc{1};
+fit=polyc{2};
+poly.coef=double(py.array.array('d',py.numpy.nditer(coef.coef)));
+poly.fit=fit;
+
+
