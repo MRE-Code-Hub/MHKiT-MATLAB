@@ -1,66 +1,77 @@
-function P=velocity_to_power(D,P,varagin)
+function p=velocity_to_power(V,polynomial_coefficients,cut_in,cut_out)
 
-% Calculates the power produced given resource discharge levels
-%     and velocity data at an individual turbine location. Additionally will 
-%     return polynomial fit to data as figure.
+% Calculates power given velocity data and the relationship 
+%     between velocity and power from an individual turbine
 %     
-%     TODO: Return polynomial fit, incorporate Kate's new assert functions,
-%           Discuss how to document multiple options for API docs
-% 
 %     Parameters
 %     ----------
-%     D : DataFrame
-%         Pandas DataFrame containing velocity for all discharge levels.
-%     P : DataFrame
-%         Pandas DataFrame with relation between velocity and power for turbine     
-%     D_keys : list
-%         Ordered list of length 1 of keys to use with DataFrame D in 
-%         if the defaults 'v' are not used (e.g. ['vel']).
-%     P_keys : ordered list
-%         Ordered list of length 2 of keys to use with DataFrame P
-%         in the order velocity, Power (e.g. ['vel', 'power']).
-%     cut_in : string or float
-%        'min'  - assumes the min velocity of 
-%          the power curve to be the cut_in velocity. 
-%        'None' - will calculate a power for resource
-%          velocity ranges outside the polynomial fit.
-%        float  - cut_in velocity may be speficied as a 
-%          float value.
-%     cut_out : string or float
-%        'max'  - (default) assumes the max velocity of 
-%          the power curve to be the cut_out velocity. 
-%        'None' - will calculate a power for resource
-%          velocity ranges outside the polynomial fit.
-%        float  - cut_out velocity may be speficied as a 
-%          float value.
-%     order : int
-%         order of the velocity to power polynomial fit 
-%     plot_polynomial_fit : bool
-%         Plots the polynomial fit and the P dataframe data
-%     append : bool
-%         Appends the output to the D DataFrame
-% 
+%     V : pandas dataframe or structure
+%         Velocity [m/s] indexed by time [s]
+%     polynomial_coefficients : numpy polynomial
+%         List of polynomial coefficients that discribe the relationship between 
+%         velocity and power at an individual turbine
+%     cut_in: float
+%         Velocity values below cut_in are not used to compute P
+%     cut_out: float
+%         Velocity values above cut_out are not used to compute P
+%     
 %     Returns   
 %     -------
-%     p : array or DataFrame
-%         Uses polynomial fit to calculate power produced
-%         for each V from the vdc curve within the specified
-%         turbine operation velocity range.
-% 
-%     Examples
-%     --------
-%     >>> # Use USGS module to import 10 year daily discharge data
-%     >>> data = river.io.usgs_data("15515500")
-%     >>> df = river.io.usgs_data_to_df(data, data_key='discharge')
-%     >>> # Convert to m3/s
-%     >>> df.discharge = df.discharge / (3.28084)**3
-%     >>> # Velocity data for VDC curve (1 turbine location), [discharge, velocity]
-%     >>> vel_data = np.array( [ [515, 1.05], [575, 1.1], [645, 1.25],[850, 1.5], [1240, 1.8], [2917, 2.9]  ] )
-%     >>> V = pd.DataFrame.from_records(vel_data, columns=['discharge', 'velocity'])
-%     >>> # Use both dfs to append VDC data to FDC df 
-%     >>> df = river.resource.discharge_to_velocity(df, V, append=True)
-%     >>> # Calculate the energy produced
-%     >>> power_data = np.array([[1.  , 0.18], [1.07, 0.23],[1.12, 0.23],[1.2 , 0.31],[1.26, 0.36],[1.36, 0.44],[1.4 , 0.47],[1.5 , 0.6 ],[1.6 , 0.74],[1.7 , 0.89],[1.8 , 1.07],[1.9 , 1.25],[2.  , 1.44],[2.1 , 1.72],[2.2 , 1.94],[2.3 , 2.24],[2.4 , 2.53],[2.51, 2.89],[2.6 , 3.28],[2.7 , 3.69],[2.8 , 4.13],[2.9 , 4.54],[3.  , 4.96]])
-%     >>> # Make a dataframe from velocity data
-%     >>> P = pd.DataFrame.from_records(power_data, columns=['velocity', 'power'])
-%     >>> df = river.resource.velocity_to_power(df, P, P_keys=['vel','powerkW'], D_keys=['v','F'], order=2, plot_polynomial_fit=True, append=True)
+%     p : Structure 
+%        P: Power [W] 
+%        time: epoch time [s]
+
+
+[own_path,~,~] = fileparts(mfilename('fullpath'));
+modpath= fullfile(own_path, '...');
+P = py.sys.path;
+if count(P,'modpath') == 0
+    insert(P,int32(0),'modpath');
+end
+
+py.importlib.import_module('mhkit');
+
+if (isa(V,'py.pandas.core.frame.DataFrame')~=1)
+    x=size(V.V);
+    li=py.list();
+    if x(2)>1 
+        for i = 1:x(2)
+            app=py.list(V.V(:,i));
+            li=py.pandas_dataframe.lis(li,app);
+            
+        end
+    elseif x(2) ==1 
+        li=V.V;
+    end
+
+
+    V=py.pandas_dataframe.timeseries_to_pandas(li,V.time,int32(x(2)));
+end
+
+polynomial_coefficients=py.numpy.poly1d(polynomial_coefficients);
+cut_in=py.float(cut_in);
+cut_out=py.float(cut_out);
+Pdf=py.mhkit.river.resource.velocity_to_power(V,polynomial_coefficients,cut_in,cut_out);
+disp(Pdf)
+
+
+xx=cell(Pdf.axes);
+v=xx{2};
+vv=cell(py.list(py.numpy.nditer(v.values,pyargs("flags",{"refs_ok"}))));
+
+vals=double(py.array.array('d',py.numpy.nditer(Pdf.values)));
+sha=cell(Pdf.values.shape);
+x=int64(sha{1,1});
+y=int64(sha{1,2});
+
+vals=reshape(vals,[x,y]);
+
+si=size(vals);
+ for i=1:si(2)
+    test=string(py.str(vv{i}));
+    newname=split(test,",");
+    disp(newname)
+    p.(newname(1))=vals(:,i);
+    
+ end
+ p.time=double(py.array.array('d',py.numpy.nditer(Pdf.index)));
