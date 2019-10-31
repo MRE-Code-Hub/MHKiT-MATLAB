@@ -44,13 +44,14 @@ end
 
 py.importlib.import_module('mhkit');
 
-%f=py.numpy.array(double(f));
+f=py.numpy.array(f);
+
 
 if nargin == 4 
     kdf=py.mhkit.wave.resource.wave_number(f,h,pyargs('rho',varargin{1},'g',varargin{2}));
 elseif nargin == 2
     kdf=py.mhkit.wave.resource.wave_number(f,h);
-    disp(kdf)
+
 else
     ME = MException('MATLAB:wave_number','incorrect numner of arguments');
         throw(ME);

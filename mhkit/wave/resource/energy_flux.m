@@ -54,8 +54,7 @@ py.importlib.import_module('mhkit');
 
 if (isa(S,'py.pandas.core.frame.DataFrame')~=1)
     if (isstruct(S)==1)
-        S=py.pandas_dataframe.spectra_to_pandas(S.frequency,py.numpy.array(S.spectrum));
-        
+        S=py.pandas_dataframe.spectra_to_pandas(uint32(S.frequency),py.numpy.array(S.spectrum));
     else
         ME = MException('MATLAB:energy_flux','S needs to be a Pandas dataframe, use py.pandas_dataframe.spectra_to_pandas to create one');
         throw(ME);
@@ -67,7 +66,7 @@ if nargin == 4
 elseif nargin == 2
     J=py.mhkit.wave.resource.energy_flux(S,h);
 else
-    ME = MException('MATLAB:energy_flux','incorrect numner of arguments');
+    ME = MException('MATLAB:energy_flux','incorrect number of arguments');
         throw(ME);
 end
 
