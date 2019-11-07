@@ -17,10 +17,18 @@ def timeseries_to_pandas(ts,ind,x):
         
     return df
 
-def spectra_to_pandas(frequency,spectra):
-    df=pd.DataFrame(data=spectra.T,index=frequency)
-    df.indexname='(Hz)'
-    c_name=['PM']
+def spectra_to_pandas(frequency,spectra,x):
+    if x>1:
+        #print(ts)
+        ts=list(map(list,zip(*spectra)))
+        #print(ind)
+        df=pd.DataFrame(data=ts,index=frequency)
+        #df.indexname='(Hz)'
+        
+    else:
+        df=pd.DataFrame(data=spectra.T,index=frequency)
+        df.indexname='(Hz)'
+        c_name=['PM']
     return df
 
 def lis(li,app):

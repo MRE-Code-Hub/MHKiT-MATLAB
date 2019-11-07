@@ -42,8 +42,19 @@ py.importlib.import_module('numpy');
 
 if (isa(S,'py.pandas.core.frame.DataFrame')~=1)
     if (isstruct(S)==1)
-        S=py.pandas_dataframe.spectra_to_pandas(S.frequency,py.numpy.array(S.spectrum));
-        disp(S);
+        x=size(S.spectrum);
+        li=py.list();
+        if x(2)>1 
+            for i = 1:x(2)
+                app=py.list(S.spectrum(:,i));
+                li=py.pandas_dataframe.lis(li,app);
+            
+            end
+            S=py.pandas_dataframe.spectra_to_pandas(uint32(S.frequency),li,int32(x(2)));
+        elseif x(2)==1
+            S=py.pandas_dataframe.spectra_to_pandas(uint32(S.frequency),py.numpy.array(S.spectrum),int32(x(2)));
+        end
+        
     else
         ME = MException('MATLAB:significant_wave_height','S needs to be a Pandas dataframe, use py.pandas_dataframe.spectra_to_pandas to create one');
         throw(ME);
@@ -51,6 +62,5 @@ if (isa(S,'py.pandas.core.frame.DataFrame')~=1)
 end
 
 Hm0=py.mhkit.wave.resource.significant_wave_height(S);
-disp(Hm0.index)
 H.values=double(Hm0.values);
 H.names=Hm0.index.values;

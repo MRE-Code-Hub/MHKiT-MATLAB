@@ -6,17 +6,19 @@ function wave_spectra=elevation_spectrum(ts,sample_rate,nnft,time,varargin)
 %    
 %     Parameters
 %     ------------
-%     ts: Wave probe time-series data, with each column a differen time
-%           series
+%     ts: matrix or table
+%           Wave probe time-series data, with each column a different time
+%           series 
 %     sampleRate: float
 %           Data frequency (Hz)
 %     nnft: int
-%     time: epoch time (s)
+%     time: vector or table
+%           time (s)
 %
 %     Optional
 %     ---------
 %     window: string scalar 
-%        Signal window type. 'hamming' is used by default given the broadband 
+%        Signal window type. "hamming" is used by default given the broadband 
 %        nature of waves. See scipy.signal.get_window for more options.
 %     detrend: logical
 %        Specifies if a linear trend is removed from the data before calculating 
@@ -51,6 +53,12 @@ end
 py.importlib.import_module('mhkit');
 py.importlib.import_module('numpy');
 if (isa(ts,'py.pandas.core.frame.DataFrame')~=1)
+    if (isa(ts,'table')==1)
+        ts=table2array(ts);
+    end
+    if (isa(time,'table')==1)
+        time=table2array(time);
+    end
     x=size(ts);
     li=py.list();
     if x(2)>1 
@@ -99,9 +107,12 @@ end
  vals=reshape(vals,[x,y]);
 
 si=size(vals);
-for i=1:si(2)
-   wave_spectra.spectrum{i}=vals(:,i);
-end
+
+wave_spectra.spectrum=vals;
+% for i=1:si(2)
+%    wave_spectra.spectrum{i}=vals(:,i);
+%    wave_spectra.spectrum{i}=[wave_spectra.spectrum{i}];
+% end
 wave_spectra.type='Spectra from Timeseries';
 
 wave_spectra.frequency=double(py.array.array('d',py.numpy.nditer(spectra.index)));
