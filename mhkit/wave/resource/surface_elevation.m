@@ -59,7 +59,7 @@ if (isa(S,'py.pandas.core.frame.DataFrame')~=1)
                 li=py.pandas_dataframe.lis(li,app);
             
             end
-            S=py.pandas_dataframe.spectra_to_pandas(uint32(S.frequency),li,int32(x(2)));
+            S=py.pandas_dataframe.spectra_to_pandas(uint32(S.frequency(:,1)),li,int32(x(2)));
         elseif x(2)==1
             S=py.pandas_dataframe.spectra_to_pandas(uint32(S.frequency),py.numpy.array(S.spectrum),int32(x(2)));
         end

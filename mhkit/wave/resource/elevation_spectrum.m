@@ -44,14 +44,16 @@ function wave_spectra=elevation_spectrum(ts,sample_rate,nnft,time,varargin)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 [own_path,~,~] = fileparts(mfilename('fullpath'));
-modpath= fullfile(own_path, '...');
+modpath= which('pandas_dataframe.py');
+modpath=modpath(1:end-19);
 P = py.sys.path;
-if count(P,'modpath') == 0
-    insert(P,int32(0),'modpath');
+if count(P,modpath) == 0
+    insert(P,int32(0),modpath);
 end
 
 py.importlib.import_module('mhkit');
 py.importlib.import_module('numpy');
+%py.importlib.import_module('pandas_dataframe');
 if (isa(ts,'py.pandas.core.frame.DataFrame')~=1)
     if (isa(ts,'table')==1)
         ts=table2array(ts);
@@ -115,7 +117,7 @@ wave_spectra.spectrum=vals;
 % end
 wave_spectra.type='Spectra from Timeseries';
 
-wave_spectra.frequency=double(py.array.array('d',py.numpy.nditer(spectra.index)));
+wave_spectra.frequency=double(py.array.array('d',py.numpy.nditer(spectra.index))).';
 wave_spectra.sample_rate=sample_rate;
 wave_spectra.nnft=nnft;
 
