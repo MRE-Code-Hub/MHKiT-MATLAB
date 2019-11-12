@@ -17,8 +17,7 @@ function figure=plot_matrix(M,Mtype)
 %   Returns
 %   ---------
 %   figure: plot of the matrix
-
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 figure=pcolor(M.Te_bins,M.Hm0_bins,M.values);
 colormap(flipud(hot))

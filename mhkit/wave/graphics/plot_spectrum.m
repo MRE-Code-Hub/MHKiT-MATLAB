@@ -1,6 +1,6 @@
 function figure=plot_spectrum(wave_spectra)
 
-% """
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %     Plots wave amplitude spectrum
 %     
 %     Parameters
@@ -13,10 +13,10 @@ function figure=plot_spectrum(wave_spectra)
 %         
 %     Returns
 %     ---------
-%     figure: matplotlib pyplot figure
+%     figure: figure
 %         Plot of wave amplitude spectra versus omega
 %     
-%     """
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 figure=plot(wave_spectra.frequency*2*3.14,wave_spectra.spectrum/(2*3.14));
 xlabel('Omega (^{rad}/_{s})')
 ylabel('Spectral Density (m^{2}s/_{rad})') 
