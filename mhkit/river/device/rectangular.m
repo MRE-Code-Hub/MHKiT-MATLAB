@@ -1,5 +1,6 @@
 function [equivalent_diameter,projected_capture_area]=rectangular(h,w)
- 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %     Calculates the equivalent diameter and projected capture area of a 
 %     retangular turbine
 %     
@@ -16,13 +17,12 @@ function [equivalent_diameter,projected_capture_area]=rectangular(h,w)
 %        Equivalent diameter [m]
 %     projected_capture_area : float
 %         Projected capture area [m^2]
-
-[own_path,~,~] = fileparts(mfilename('fullpath'));
-modpath= fullfile(own_path, '...');
-P = py.sys.path;
-if count(P,'modpath') == 0
-    insert(P,int32(0),'modpath');
-end
+%
+%    Dependancies 
+%    -------------
+%    Python 3.5 or higher
+%    mhkit
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 py.importlib.import_module('mhkit');
 
