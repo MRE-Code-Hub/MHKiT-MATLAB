@@ -32,15 +32,13 @@ function datast=read_NDBC_file(file_name,varargin)
 %         time: given in datetime 
 %         units: the units for each data entry
 %         
-
-
-[own_path,~,~] = fileparts(mfilename('fullpath'));
-modpath= fullfile(own_path);
-P = py.sys.path;
-
-if count(P,modpath) == 0
-    insert(P,int32(0),modpath);
-end
+%    Dependancies 
+%    -------------
+%    Python 3.5 or higher
+%    numpy
+%    mhkit
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 py.importlib.import_module('mhkit');
 py.importlib.import_module('numpy');
