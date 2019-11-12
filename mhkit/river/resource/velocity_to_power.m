@@ -1,5 +1,6 @@
 function p=velocity_to_power(V,polynomial_coefficients,cut_in,cut_out)
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Calculates power given velocity data and the relationship 
 %     between velocity and power from an individual turbine
 %     
@@ -20,15 +21,18 @@ function p=velocity_to_power(V,polynomial_coefficients,cut_in,cut_out)
 %     p : Structure 
 %        P: Power [W] 
 %        time: epoch time [s]
+%
+%    Dependancies 
+%    -------------
+%    Python 3.5 or higher
+%    Pandas
+%    mhkit_python_utils
+%    numpy
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-[own_path,~,~] = fileparts(mfilename('fullpath'));
-modpath= fullfile(own_path, '...');
-P = py.sys.path;
-if count(P,'modpath') == 0
-    insert(P,int32(0),'modpath');
-end
-
+py.importlib.import_module('mhkit_python_utils');
 py.importlib.import_module('mhkit');
 
 if (isa(V,'py.pandas.core.frame.DataFrame')~=1)
@@ -37,7 +41,7 @@ if (isa(V,'py.pandas.core.frame.DataFrame')~=1)
     if x(2)>1 
         for i = 1:x(2)
             app=py.list(V.V(:,i));
-            li=py.pandas_dataframe.lis(li,app);
+            li=py.mhkit_python_utils.pandas_dataframe.lis(li,app);
             
         end
     elseif x(2) ==1 
@@ -45,7 +49,7 @@ if (isa(V,'py.pandas.core.frame.DataFrame')~=1)
     end
 
 
-    V=py.pandas_dataframe.timeseries_to_pandas(li,V.time,int32(x(2)));
+    V=py.mhkit_python_utils.pandas_dataframe.timeseries_to_pandas(li,V.time,int32(x(2)));
 end
 
 polynomial_coefficients=py.numpy.poly1d(polynomial_coefficients);

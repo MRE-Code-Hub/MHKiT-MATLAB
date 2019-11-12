@@ -1,5 +1,6 @@
 function poly=polynomial_fit(x,y,n)
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Returns a polynomial fit for y given x of order n.
 % 
 %     Parameters
@@ -15,14 +16,14 @@ function poly=polynomial_fit(x,y,n)
 %     ==========
 %     poly: structure
 %       coef: polynomial coefficients 
-%       fit: fit coefficients 
-
-[own_path,~,~] = fileparts(mfilename('fullpath'));
-modpath= fullfile(own_path, '...');
-P = py.sys.path;
-if count(P,'modpath') == 0
-    insert(P,int32(0),'modpath');
-end
+%       fit: fit coefficients
+%
+%    Dependancies 
+%    -------------
+%    Python 3.5 or higher
+%    mhkit
+%    numpy
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 py.importlib.import_module('mhkit');
 x=py.numpy.array(x);

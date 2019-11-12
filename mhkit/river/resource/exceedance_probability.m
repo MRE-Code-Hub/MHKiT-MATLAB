@@ -1,10 +1,11 @@
 function EP=exceedance_probability(D)
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Calculates the exceedance probability
-    
+%    
 %     Parameters
 %     ----------
-%     D : pandas DataFrame  
+%     D : structure  
 %               Discharge data [m^3/s] indexed by time [datetime].  Note that 
 %               river resource calculations require 10 years of daily data.
 %         or Structure
@@ -15,14 +16,18 @@ function EP=exceedance_probability(D)
 %     -------
 %     EP : Structure     
 %         Exceedance probability [unitless] indexed by time [epoch time (s)]
+%
+%    Dependancies 
+%    -------------
+%    Python 3.5 or higher
+%    Pandas
+%    mhkit_python_utils
+%    numpy
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-[own_path,~,~] = fileparts(mfilename('fullpath'));
-modpath= fullfile(own_path, '...');
-P = py.sys.path;
-if count(P,'modpath') == 0
-    insert(P,int32(0),'modpath');
-end
 
+py.importlib.import_module('mhkit_python_utils');
 py.importlib.import_module('mhkit');
 
 if (isa(D,'py.pandas.core.frame.DataFrame')~=1)
@@ -31,7 +36,7 @@ if (isa(D,'py.pandas.core.frame.DataFrame')~=1)
     if x(2)>1 
         for i = 1:x(2)
             app=py.list(D.Discharge(:,i));
-            li=py.pandas_dataframe.lis(li,app);
+            li=py.mhkit_python_utils.pandas_dataframe.lis(li,app);
             
         end
     elseif x(2) ==1 
@@ -44,7 +49,7 @@ if (isa(D,'py.pandas.core.frame.DataFrame')~=1)
         D.time{i}=posixtime(D.time{i});
         end
     end
-    D=py.pandas_dataframe.timeseries_to_pandas(li,D.time,int32(x(2)));
+    D=py.mhkit_python_utils.pandas_dataframe.timeseries_to_pandas(li,D.time,int32(x(2)));
 end
 
 EPpd=py.mhkit.river.resource.exceedance_probability(D);

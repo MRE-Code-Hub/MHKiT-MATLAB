@@ -1,5 +1,6 @@
 function Fr=Froude_number(v,h,varargin)
-%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %     Calculate the Froude Number of the river, channel or duct flow,
 %     to check subcritical flow assumption (if Fr <1).
 %     
@@ -19,17 +20,17 @@ function Fr=Froude_number(v,h,varargin)
 %         Froude Number of the river [unitless].
 % 
 %   
-[own_path,~,~] = fileparts(mfilename('fullpath'));
-modpath= fullfile(own_path, '...');
-P = py.sys.path;
-if count(P,'modpath') == 0
-    insert(P,int32(0),'modpath');
-end
+%    Dependancies 
+%    -------------
+%    Python 3.5 or higher
+%    mhkit
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 py.importlib.import_module('mhkit');
 
 if nargin == 3 
      g=varagin{1};
-     Fr=mhkit.river.resource.Froude_number(v,h,pyargs('g',g));
+     Fr=py.mhkit.river.resource.Froude_number(v,h,pyargs('g',g));
 else 
-     Fr=mhkit.river.resource.Froude_number(v,h);
+     Fr=py.mhkit.river.resource.Froude_number(v,h);
+end

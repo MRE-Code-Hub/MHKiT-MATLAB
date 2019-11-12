@@ -1,11 +1,12 @@
 function V=discharge_to_velocity(D,polynomial_coefficients)
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Calculates velocity given discharge data and the relationship between 
 %     discharge and velocity at an individual turbine
 %     
 %     Parameters
 %     ------------
-%     D : structure
+%     D : Pandas dataframe or structure
 %         Discharge data [m3/s] indexed by time [datetime or s]
 %     polynomial_coefficients : numpy polynomial
 %         List of polynomial coefficients that discribe the relationship between 
@@ -15,15 +16,19 @@ function V=discharge_to_velocity(D,polynomial_coefficients)
 %     ------------
 %     V: pandas DataFrame   
 %         Velocity [m/s] indexed by time [datetime or s]
+%
+%    Dependancies 
+%    -------------
+%    Python 3.5 or higher
+%    Pandas
+%    mhkit_python_utils
+%    numpy
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-[own_path,~,~] = fileparts(mfilename('fullpath'));
-modpath= fullfile(own_path, '...');
-P = py.sys.path;
-if count(P,'modpath') == 0
-    insert(P,int32(0),'modpath');
-end
 
 py.importlib.import_module('mhkit');
+py.importlib.import_module('mhkit_python_utils');
 
 if (isa(D,'py.pandas.core.frame.DataFrame')~=1)
     x=size(D.Discharge);
@@ -31,7 +36,7 @@ if (isa(D,'py.pandas.core.frame.DataFrame')~=1)
     if x(2)>1 
         for i = 1:x(2)
             app=py.list(D.Discharge(:,i));
-            li=py.pandas_dataframe.lis(li,app);
+            li=py.mhkit_python_utils.pandas_dataframe.lis(li,app);
             
         end
     elseif x(2) ==1 
@@ -44,7 +49,7 @@ if (isa(D,'py.pandas.core.frame.DataFrame')~=1)
         D.time{i}=posixtime(D.time{i});
         end
     end
-    D=py.pandas_dataframe.timeseries_to_pandas(li,D.time,int32(x(2)));
+    D=py.mhkit_python_utils.pandas_dataframe.timeseries_to_pandas(li,D.time,int32(x(2)));
 end
 
 polynomial_coefficients=py.numpy.poly1d(polynomial_coefficients);
