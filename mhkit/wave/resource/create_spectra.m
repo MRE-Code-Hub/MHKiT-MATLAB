@@ -37,12 +37,6 @@ function wave_spectra=create_spectra(spectra_type,frequency,Tp,varargin)
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-[own_path,~,~] = fileparts(mfilename('fullpath'));
-modpath= fullfile(own_path, '...');
-P = py.sys.path;
-if count(P,'modpath') == 0
-    insert(P,int32(0),'modpath');
-end
 
 py.importlib.import_module('mhkit');
 py.importlib.import_module('numpy');

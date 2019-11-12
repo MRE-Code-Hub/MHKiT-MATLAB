@@ -39,21 +39,15 @@ function wave_spectra=elevation_spectrum(ts,sample_rate,nnft,time,varargin)
 %     Python 3.5 or higher
 %     Pandas
 %     Scipy
-%     pandas_dataframe.py
+%     mhkit_python_utils
+%     numpy
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-[own_path,~,~] = fileparts(mfilename('fullpath'));
-modpath= which('pandas_dataframe.py');
-modpath=modpath(1:end-19);
-P = py.sys.path;
-if count(P,modpath) == 0
-    insert(P,int32(0),modpath);
-end
-
 py.importlib.import_module('mhkit');
 py.importlib.import_module('numpy');
-%py.importlib.import_module('pandas_dataframe');
+py.importlib.import_module('pandas');
+py.importlib.import_module('mhkit_python_utils');
 if (isa(ts,'py.pandas.core.frame.DataFrame')~=1)
     if (isa(ts,'table')==1)
         ts=table2array(ts);
@@ -66,12 +60,13 @@ if (isa(ts,'py.pandas.core.frame.DataFrame')~=1)
     if x(2)>1 
         for i = 1:x(2)
             app=py.list(ts(:,i));
-            li=py.pandas_dataframe.lis(li,app);
-            
-        end
-    ts=py.pandas_dataframe.timeseries_to_pandas(li,time,int32(x(2)));
+            li=py.mhkit_python_utils.pandas_dataframe.lis(li,app);
+        end  
+        ts=py.mhkit_python_utils.pandas_dataframe.timeseries_to_pandas(li,time,int32(x(2)));        
+
     elseif x(2)==1
-       ts=py.pandas_dataframe.timeseries_to_pandas(ts,time,int32(x(2))); 
+       ts=py.mhkit_python_utils.pandas_dataframe.timeseries_to_pandas(ts,time,int32(x(2))); 
+       
     end
     
 end
