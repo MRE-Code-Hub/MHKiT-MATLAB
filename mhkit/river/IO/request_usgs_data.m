@@ -1,5 +1,6 @@
 function datast=request_usgs_data(station, parameter, start_date, end_date,varargin)
-%     """
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %     Loads USGS data directly from https://waterdata.usgs.gov/nwis using a 
 %     GET request into a pandas DataFrame
 %     
@@ -33,14 +34,16 @@ function datast=request_usgs_data(station, parameter, start_date, end_date,varar
 %         Data:named according to the parameter's variable description
 %         time: datetime
 %         units: units for each parameter
+%
+%    Dependancies 
+%    -------------
+%    Python 3.5 or higher
+%    mhkit
+%    numpy
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-[own_path,~,~] = fileparts(mfilename('fullpath'));
-modpath= fullfile(own_path, '...');
-P = py.sys.path;
-if count(P,'modpath') == 0
-    insert(P,int32(0),'modpath');
-end
+%%%%% NOTE: TODO: still need to add creation of dictionary from structure
+%%%%% for proxy argument 
 
 py.importlib.import_module('mhkit');
 
@@ -110,7 +113,6 @@ else
     datapd=py.mhkit.river.io.request_usgs_data(station, parameter, start_date, end_date);
 end
 
-disp(datapd)
 
 xx=cell(datapd.axes);
 v=xx{2};
