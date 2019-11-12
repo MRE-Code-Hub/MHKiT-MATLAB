@@ -62,7 +62,7 @@ if (isa(JM,'py.pandas.core.frame.DataFrame')~=1)
     JMpan=py.pandas_dataframe.timeseries_to_pandas(li,py.list(JM.Hm0_bins),int32(x(2)));
 end
 
-PMpan=py.mhkit.wave.device.power_matrix(LMpan,JMpan);
+PMpan=py.mhkit.wave.performance.power_matrix(LMpan,JMpan);
 
 vals=double(py.array.array('d',py.numpy.nditer(PMpan.values)));
 sha=cell(PMpan.values.shape);

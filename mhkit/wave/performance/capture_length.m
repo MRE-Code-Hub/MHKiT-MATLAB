@@ -33,4 +33,4 @@ Power=py.numpy.array(Power);
 J=py.numpy.array(J);
 
 
-L=double(py.mhkit.wave.device.capture_length(Power,J));
+L=double(py.mhkit.wave.performance.capture_length(Power,J));

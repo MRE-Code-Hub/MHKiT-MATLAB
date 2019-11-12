@@ -45,7 +45,7 @@ J=py.numpy.array(J);
 Hm0_bins=py.numpy.array(Hm0_bins);
 Te_bins=py.numpy.array(Te_bins);
 
-JM=py.mhkit.wave.device.wave_energy_flux_matrix(Hm0,Te,J,statistic,Hm0_bins,Te_bins);
+JM=py.mhkit.wave.performance.wave_energy_flux_matrix(Hm0,Te,J,statistic,Hm0_bins,Te_bins);
 vals=double(py.array.array('d',py.numpy.nditer(JM.values)));
 sha=cell(JM.values.shape);
 x=int64(sha{1,1});

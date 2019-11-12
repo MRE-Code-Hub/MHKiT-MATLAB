@@ -30,4 +30,4 @@ py.importlib.import_module('mhkit');
 J=py.numpy.array(J);
 L=py.numpy.array(L);
 
-maep=double(py.mhkit.wave.device.mean_annual_energy_production_timeseries(L,J));
+maep=double(py.mhkit.wave.performance.mean_annual_energy_production_timeseries(L,J));

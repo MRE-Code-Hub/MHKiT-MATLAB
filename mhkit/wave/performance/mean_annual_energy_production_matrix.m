@@ -74,4 +74,4 @@ if (isa(frequency,'py.pandas.core.frame.DataFrame')~=1)
     freqpan=py.pandas_dataframe.timeseries_to_pandas(li,py.list(frequency.Hm0_bins),int32(x(2)));
 end
 
-maep=double(py.mhkit.wave.device.mean_annual_energy_production_matrix(LMpan,JMpan,freqpan));
+maep=double(py.mhkit.wave.performance.mean_annual_energy_production_matrix(LMpan,JMpan,freqpan));
