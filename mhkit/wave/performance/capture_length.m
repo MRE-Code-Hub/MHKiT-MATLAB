@@ -17,14 +17,13 @@ function L=capture_length(Power,J)
 %     L: vector
 %         Capture length [m]
 %
+%    Dependancies 
+%    -------------
+%    Python 3.5 or higher
+%    numpy
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-[own_path,~,~] = fileparts(mfilename('fullpath'));
-modpath= fullfile(own_path, '...');
-P = py.sys.path;
-if count(P,'modpath') == 0
-    insert(P,int32(0),'modpath');
-end
 
 py.importlib.import_module('mhkit');
 py.importlib.import_module('numpy');

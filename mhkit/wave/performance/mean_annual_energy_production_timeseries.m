@@ -16,14 +16,14 @@ function maep=mean_annual_energy_production_timeseries(L,J)
 %     maep: float
 %         Mean annual energy production
 %
+%    Dependancies 
+%    -------------
+%    Python 3.5 or higher
+%    numpy
+%    mhkit
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-[own_path,~,~] = fileparts(mfilename('fullpath'));
-modpath= fullfile(own_path, '...');
-P = py.sys.path;
-if count(P,'modpath') == 0
-    insert(P,int32(0),'modpath');
-end
 
 py.importlib.import_module('mhkit');
 

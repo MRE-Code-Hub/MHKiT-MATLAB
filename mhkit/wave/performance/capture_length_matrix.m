@@ -27,16 +27,15 @@ function clm=capture_length_matrix(Hm0,Te,L,statistic,Hm0_bins,Te_bins)
 %     Returns
 %     ---------
 %     clm: structure
-%         
+% 
+%    Dependancies 
+%    -------------
+%    Python 3.5 or higher
+%    numpy
+%    mhkit
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-[own_path,~,~] = fileparts(mfilename('fullpath'));
-modpath= fullfile(own_path, '...');
-P = py.sys.path;
-if count(P,'modpath') == 0
-    insert(P,int32(0),'modpath');
-end
 
 py.importlib.import_module('mhkit');
 

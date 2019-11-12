@@ -21,15 +21,17 @@ function maep=mean_annual_energy_production_matrix(LM,JM,frequency)
 %     maep: float
 %         Mean annual energy production
 %
+%    Dependancies 
+%    -------------
+%    Python 3.5 or higher
+%    numpy
+%    mhkit
+%    mhkit_python_utils
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-[own_path,~,~] = fileparts(mfilename('fullpath'));
-modpath= fullfile(own_path, '...');
-P = py.sys.path;
-if count(P,'modpath') == 0
-    insert(P,int32(0),'modpath');
-end
 
+py.importlib.import_module('mhkit_python_utils');
 py.importlib.import_module('mhkit');
 
 if (isa(LM,'py.pandas.core.frame.DataFrame')~=1)
@@ -39,12 +41,12 @@ if (isa(LM,'py.pandas.core.frame.DataFrame')~=1)
     if x(2)>1 
         for i = 1:x(2)
             app=py.list(LM.values(:,i));
-            li=py.pandas_dataframe.lis(li,app);
+            li=py.mhkit_python_utils.pandas_dataframe.lis(li,app);
             
         end
     end
 
-    LMpan=py.pandas_dataframe.timeseries_to_pandas(li,py.list(LM.Hm0_bins),int32(x(2)));
+    LMpan=py.mhkit_python_utils.pandas_dataframe.timeseries_to_pandas(li,py.list(LM.Hm0_bins),int32(x(2)));
     
 end
 
@@ -54,11 +56,11 @@ if (isa(JM,'py.pandas.core.frame.DataFrame')~=1)
     if x(2)>1 
         for i = 1:x(2)
             app=py.list(JM.values(:,i));
-            li=py.pandas_dataframe.lis(li,app);
+            li=py.mhkit_python_utils.pandas_dataframe.lis(li,app);
             
         end
     end
-    JMpan=py.pandas_dataframe.timeseries_to_pandas(li,py.list(JM.Hm0_bins),int32(x(2)));
+    JMpan=py.mhkit_python_utils.pandas_dataframe.timeseries_to_pandas(li,py.list(JM.Hm0_bins),int32(x(2)));
 end
 
 if (isa(frequency,'py.pandas.core.frame.DataFrame')~=1)
@@ -67,11 +69,11 @@ if (isa(frequency,'py.pandas.core.frame.DataFrame')~=1)
     if x(2)>1 
         for i = 1:x(2)
             app=py.list(frequency.values(:,i));
-            li=py.pandas_dataframe.lis(li,app);
+            li=py.mhkit_python_utils.pandas_dataframe.lis(li,app);
             
         end
     end
-    freqpan=py.pandas_dataframe.timeseries_to_pandas(li,py.list(frequency.Hm0_bins),int32(x(2)));
+    freqpan=py.mhkit_python_utils.pandas_dataframe.timeseries_to_pandas(li,py.list(frequency.Hm0_bins),int32(x(2)));
 end
 
 maep=double(py.mhkit.wave.performance.mean_annual_energy_production_matrix(LMpan,JMpan,freqpan));
