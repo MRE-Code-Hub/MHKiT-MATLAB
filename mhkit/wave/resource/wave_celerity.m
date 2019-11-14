@@ -44,8 +44,18 @@ py.importlib.import_module('mhkit_python_utils');
 
 if (isa(k,'py.pandas.core.frame.DataFrame')~=1)
     if (isstruct(k)==1)
-        k=py.mhkit_python_utils.pandas_dataframe.spectra_to_pandas(k.frequency,py.numpy.array(k.values));
-        
+%         x=size(k.values);
+%         li=py.list();
+%         if x(2)>1 
+%             for i = 1:x(2)
+%                 app=py.list(k.values(:,i));
+%                 li=py.mhkit_python_utils.pandas_dataframe.lis(li,app);
+%             
+%             end
+%             k=py.mhkit_python_utils.pandas_dataframe.spectra_to_pandas(k.frequency,li,int32(x(2)));
+%         elseif x(2)==1
+            k=py.mhkit_python_utils.pandas_dataframe.spectra_to_pandas(k.frequency,py.numpy.array(k.values),1);
+        %end
     else
         ME = MException('MATLAB:wave_celerity','S needs to be a Pandas dataframe, use py.mhkit_python_utils.pandas_dataframe.spectra_to_pandas to create one');
         throw(ME);

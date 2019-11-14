@@ -43,6 +43,7 @@ py.importlib.import_module('mhkit_python_utils');
 
 if (isa(time_index,'py.numpy.ndarray') ~= 1)
     time_index = py.numpy.array(time_index);
+    disp(time_index)
 end
 
 if (isa(S,'py.pandas.core.frame.DataFrame')~=1)
