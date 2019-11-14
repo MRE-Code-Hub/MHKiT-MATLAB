@@ -58,5 +58,5 @@ if (isa(S,'py.pandas.core.frame.DataFrame')~=1)
     end
 end
 
-m=py.mhkit.wave.resource.frequency_moment(S,N);
+m=py.mhkit.wave.resource.frequency_moment(S,int32(N));
 m=double(m.values);

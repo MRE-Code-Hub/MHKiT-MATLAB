@@ -30,7 +30,7 @@ function Te=energy_period(S)
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
+py.importlib.import_module('numpy');
 py.importlib.import_module('mhkit');
 py.importlib.import_module('mhkit_python_utils');
 
@@ -40,13 +40,13 @@ if (isa(S,'py.pandas.core.frame.DataFrame')~=1)
         li=py.list();
         if x(2)>1 
             for i = 1:x(2)
-                app=py.list(S.spectrum(:,i));
+                app=py.list(double(S.spectrum(:,i)));
                 li=py.mhkit_python_utils.pandas_dataframe.lis(li,app);
             
             end
-            S=py.mhkit_python_utils.pandas_dataframe.spectra_to_pandas(uint32(S.frequency(:,1)),li,int32(x(2)));
+            S=py.mhkit_python_utils.pandas_dataframe.spectra_to_pandas(double(S.frequency(:,1)),li,int32(x(2)));
         elseif x(2)==1
-            S=py.mhkit_python_utils.pandas_dataframe.spectra_to_pandas(uint32(S.frequency),py.numpy.array(S.spectrum),int32(x(2)));
+            S=py.mhkit_python_utils.pandas_dataframe.spectra_to_pandas(double(S.frequency),double(S.spectrum),int32(x(2)));
         end
         
     else
@@ -54,6 +54,6 @@ if (isa(S,'py.pandas.core.frame.DataFrame')~=1)
         throw(ME);
     end
 end
-
+disp(S.values)
 Te=py.mhkit.wave.resource.energy_period(S);
 Te=double(Te.values);

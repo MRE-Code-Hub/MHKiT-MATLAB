@@ -78,10 +78,10 @@ else
     throw(ME);
 end
 
-wave_spectra.spectrum=double(py.array.array('d',py.numpy.nditer(S.values)));
+wave_spectra.spectrum=double(py.array.array('d',py.numpy.nditer(S.values))).';
 char_arr=char(S.index.values);
 wave_spectra.type=spectra_type;
-wave_spectra.frequency=double(py.array.array('d',py.numpy.nditer(S.index)));
+wave_spectra.frequency=double(py.array.array('d',py.numpy.nditer(S.index))).';
 wave_spectra.Tp=Tp;
 if nargin == 4 
     wave_spectra.Hs=varargin{1};
