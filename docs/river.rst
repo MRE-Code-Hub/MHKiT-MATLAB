@@ -3,14 +3,14 @@
 River module
 ========================================
 
-The :class:`~mhkit.river` module contains a set of functions to 
+The :class:`~mhkit/river` module contains a set of functions to 
 calculate quantities of interest for river energy converters (REC). 
 The river module contains the following submodules:
 
-* :class:`~mhkit.river.io`: Loads data from standard formats
-* :class:`~mhkit.river.resource`: Computes resource metrics such as exceedance probability, velocity, and power
-* :class:`~mhkit.river.device`: Computes device metrics such as equivalent diameter and capture area
-* :class:`~mhkit.river.graphics`: Generates graphics
+* :class:`~mhkit/river/io`: Loads data from standard formats
+* :class:`~mhkit/river/resource`: Computes resource metrics such as exceedance probability, velocity, and power
+* :class:`~mhkit/river/device`: Computes device metrics such as equivalent diameter and capture area
+* :class:`~mhkit/river/graphics`: Generates graphics
 
 Data format
 --------------
@@ -23,7 +23,7 @@ The river module uses discharge data.
 
 File IO
 --------------
-The :class:`~mhkit.river.io` submodule contains the following functions to 
+The :class:`~mhkit/river/io` submodule contains the following functions to 
 load USGS Discharge data into a pandas DataFrame.  
 
 .. autosummary::
