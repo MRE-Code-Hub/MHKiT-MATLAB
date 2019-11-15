@@ -13,7 +13,7 @@ function datast=read_usgs_file(file_name)
 %     -------
 %     data : structure  
 %         Data:named according to the parameter's variable description
-%         time: datetime
+%         time: epoch time [s]
 %         units: units for each parameter
 %
 %    Dependancies 
@@ -51,8 +51,10 @@ si=size(vals);
     datast.units.(newname(1))=newname(2);
  end
  for i=1:siti(2)
-    datast.time{i}=datetime(string(py.str(ti{i})),'InputFormat','yyyy-MM-dd''T''HH:mm:ss.SSSSSSSSS');
+    datast.time{i}=posixtime(datetime(string(py.str(ti{i})),'InputFormat','yyyy-MM-dd''T''HH:mm:ss.SSSSSSSSS'));
  end
+ 
+ datast.time=cell2mat(datast.time)
 
 
 

@@ -25,14 +25,15 @@ function figure=plot_velocity_vs_power(V,P,varargin)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 figure=plot(V,P);
-xlable('Velocity [^m^{3}/_{s}]','FontSize',20)
-ylable('Power [W]','FontSize',20)
+xlabel('Velocity [^m^{3}/_{s}]','FontSize',20)
+ylabel('Power [W]','FontSize',20)
 
 if nargin == 3
     if isstring(varargin{1})
         title(varargin{1})
-    elseif isdouble(varargin{1})
-        x=linspace(min(D),max(D),size(varargin{1}));
+    elseif isnumeric(varargin{1})
+        si=size(varargin{1});
+        x=linspace(min(V),max(V),si(2));
         hold on
         plot(x,varargin{1})
     else
@@ -41,13 +42,15 @@ if nargin == 3
     end
     
 elseif nargin ==4 
-    if isstring(varargin{1}) & isdouble(varargin{2})
-        x=linspace(min(D),max(D),size(varargin{2}));
+    if isstring(varargin{1}) & isnumeric(varargin{2})
+        si=size(varargin{2});
+        x=linspace(min(V),max(V),si(2));
         hold on
         plot(x,varargin{2})
         title(varargin{1})
-    elseif isstring(varargin{2}) & isdouble(varargin{1})
-        x=linspace(min(D),max(D),size(varargin{1}));
+    elseif isstring(varargin{2}) & isnumeric(varargin{1})
+        si=size(varargin{1});
+        x=linspace(min(V),max(V),si(2));
         hold on
         plot(x,varargin{1})
         title(varargin{2})

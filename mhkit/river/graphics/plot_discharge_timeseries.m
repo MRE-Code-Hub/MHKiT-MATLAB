@@ -19,8 +19,8 @@ function figure=plot_discharge_timeseries(D,varargin)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 figure=plot(D.time,D.Discharge);
-xlable('Time','FontSize',20)
-ylable('Discharge [^m^{3}/_{s}]','FontSize',20)
+xlabel('Time','FontSize',20)
+ylabel('Discharge [^m^{3}/_{s}]','FontSize',20)
 
 if nargin ==2
     title(varargin{1})

@@ -54,6 +54,6 @@ if (isa(S,'py.pandas.core.frame.DataFrame')~=1)
         throw(ME);
     end
 end
-disp(S.values)
+
 Te=py.mhkit.wave.resource.energy_period(S);
 Te=double(Te.values);

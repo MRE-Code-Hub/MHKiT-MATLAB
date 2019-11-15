@@ -43,10 +43,10 @@ if (isa(D,'py.pandas.core.frame.DataFrame')~=1)
         li=D.Discharge;
     end
     
-    if any(isdatetime(D.time{1}))
+    if any(isdatetime(D.time(1)))
         si=size(D.time);
         for i=1:si(2)
-        D.time{i}=posixtime(D.time{i});
+        D.time(i)=posixtime(D.time(i));
         end
     end
     D=py.mhkit_python_utils.pandas_dataframe.timeseries_to_pandas(li,D.time,int32(x(2)));
