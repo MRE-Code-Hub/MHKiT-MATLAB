@@ -58,5 +58,5 @@ elseif nargin > 4
         throw(ME);
 end
         
-        
+hold off        
         

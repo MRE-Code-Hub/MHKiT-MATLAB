@@ -59,3 +59,5 @@ elseif nargin > 4
     ME = MException('MATLAB:plot_velocity_vs_power','Too many arguments given');
         throw(ME);
 end
+
+hold off
