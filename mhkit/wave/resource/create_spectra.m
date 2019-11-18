@@ -1,39 +1,36 @@
 function wave_spectra=create_spectra(spectra_type,frequency,Tp,varargin)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% spectra,spectra_type,frequency=create_spectra(spectraType,frequency,Tp,varagin)
-%Calculates wave spectra of user specified type
+%   Calculates wave spectra of user specified type
 %    
-%     Parameters
-%     ------------
+% Parameters
+% ------------
 %     spectraType: String of spectra type
 %         Options are: 'pierson_moskowitz_spectrum',
 %         'bretschneider_spectrum', or 'jonswap_spectrum'
+%
 %     Frequency: float
 %         Wave frequency (Hz)
+%
 %     Tp: float
 %         Peak Period (s)
-%     Optional Parameters
-%     -------------------
+%
 %     Hs: float - Required for 'bretschneider_spectrum', and 'jonswap_spectrum'
 %         Significant Wave Height (s)
-%    gamma: float
+%
+%     gamma: float (optional)
 %         only an optional parameter for 'jonswap_spectrum'
 %     
-%     Returns
-%     ---------
-%     wave_spectra: structure 
-%         wave_spectra.spectrum=Spectral Density (m^2-s;
-%         wave_spectra.type=String of the spectra type, i.e. Bretschneider, 
-%                time series, date stamp etc. ;
-%         wave_spectra.frequency= frequency (Hz);
+% Returns
+% ---------
+%     wave_spectra: structure
 %
-%     Dependancies 
-%     -------------
-%     Python 3.5 or higher
-%     Pandas
-%     Scipy
-%     Numpy
+%         wave_spectra.spectrum=Spectral Density (m^2/Hz)
+%
+%         wave_spectra.type=String of the spectra type, i.e. Bretschneider, 
+%         time series, date stamp etc. 
+%
+%         wave_spectra.frequency= frequency (Hz)
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

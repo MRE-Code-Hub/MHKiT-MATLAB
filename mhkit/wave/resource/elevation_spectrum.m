@@ -1,46 +1,43 @@
 function wave_spectra=elevation_spectrum(ts,sample_rate,nnft,time,varargin)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% spectra=elevation_spectrum(ts,sampleRate,nnft)
-%Calculates wave spectra from wave probe timeseries
+%   Calculates wave spectra from wave probe timeseries
 %    
-%     Parameters
-%     ------------
+% Parameters
+% ------------
 %     ts: matrix or table
 %           Wave probe time-series data, with each column a different time
-%           series 
+%           series
+%
 %     sampleRate: float
 %           Data frequency (Hz)
+%
 %     nnft: int
+%
 %     time: vector or table
 %           time (s)
 %
-%     Optional
-%     ---------
-%     window: string scalar 
+%     window: string scalar (Optional)
 %        Signal window type. "hamming" is used by default given the broadband 
 %        nature of waves. See scipy.signal.get_window for more options.
-%     detrend: logical
+%
+%     detrend: logical (Optional)
 %        Specifies if a linear trend is removed from the data before calculating 
 %        the wave energy spectrum.  Data is detrended by default.
 %
-%     Returns
-%     ---------
+% Returns
+% ---------
 %     wave_spectra: structure 
 %         wave_spectra.spectrum: cell array
 %            Spectral Density (m^2/Hz) per probe
-%         wave_spectra.type: 'Spectra from Time Series'
-%         wave_spectra.frequency: frequency [Hz] 
-%         wave_spectra.sample_rate: sample_rate
-%         wave_spectra.nnft: nnft
 %
-%     Dependancies 
-%     -------------
-%     Python 3.5 or higher
-%     Pandas
-%     Scipy
-%     mhkit_python_utils
-%     numpy
+%         wave_spectra.type: 'Spectra from Time Series'
+%
+%         wave_spectra.frequency: frequency [Hz] 
+%
+%         wave_spectra.sample_rate: sample_rate
+%
+%         wave_spectra.nnft: nnft
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

@@ -3,30 +3,27 @@ function Tz=average_zero_crossing_period(S)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Calculates time-series of wave amplitude from spectrum using random phase
 %    
-%    Parameters
-%    ------------
-%    S: Spectral Density (m^2-s)
-%           Pandas data frame
-%       To make a pandas data frame from user supplied frequency and spectra
-%       use py.pandas_dataframe.spectra_to_pandas(frequency,spectra)
-%        OR
-%        wave_spectra structure of form
-%        wave_spectra.spectrum=Spectral Density (m^2-s;
-%         wave_spectra.type=String of the spectra type, i.e. Bretschneider, 
-%                time series, date stamp etc. ;
-%         wave_spectra.frequency= frequency (Hz);
+% Parameters
+% ------------
+%    S: Spectral Density (m^2/Hz)
+%       Pandas data frame
+%           To make a pandas data frame from user supplied frequency and spectra
+%           use py.pandas_dataframe.spectra_to_pandas(frequency,spectra)
 %
-%    Returns
-%    ---------
+%       OR
+%
+%       structure of form:
+%           wave_spectra.spectrum: Spectral Density (m^2/Hz)
+%
+%           wave_spectra.type: String of the spectra type, i.e. Bretschneider, 
+%           time series, date stamp etc.
+%
+%           wave_spectra.frequency: frequency (Hz)
+%
+% Returns
+% ---------
 %    Tz: double
 %        Average Zero Crossing Period (s)
-%
-%    Dependancies 
-%    -------------
-%    Python 3.5 or higher
-%    Pandas
-%    mhkit_python_utils
-%    Numpy
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

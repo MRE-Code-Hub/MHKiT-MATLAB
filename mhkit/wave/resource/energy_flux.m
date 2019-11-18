@@ -3,42 +3,39 @@ function J=energy_flux(S,h,varargin)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
 %    
-%    Parameters
-%    ------------
-%    S: Spectral Density (m^2-s)
-%           Pandas data frame
-%       To make a pandas data frame from user supplied frequency and spectra
-%       use py.pandas_dataframe.spectra_to_pandas(frequency,spectra)
-%        OR
-%        wave_spectra structure of form
-%        wave_spectra.spectrum=Spectral Density (m^2-s;
-%         wave_spectra.type=String of the spectra type, i.e. Bretschneider, 
-%                time series, date stamp etc. ;
-%         wave_spectra.frequency= frequency (Hz);
+% Parameters
+% ------------
+%    S: Spectral Density (m^2/Hz)
+%       Pandas data frame
+%           To make a pandas data frame from user supplied frequency and spectra
+%           use py.pandas_dataframe.spectra_to_pandas(frequency,spectra)
+%
+%       OR
+%
+%       structure of form:
+%           wave_spectra.spectrum: Spectral Density (m^2/Hz)
+%
+%           wave_spectra.type: String of the spectra type, i.e. Bretschneider, 
+%           time series, date stamp etc.
+%
+%           wave_spectra.frequency: frequency (Hz)
+%
 %    h: float
 %         Water depth (m)
 %
-%     Optional 
-%     ---------
+%     rho: float (optional)
+%         water density (kg/m^3)
+%     g: float (optional)
+%         gravitational acceleration (m/s^2)
+%
 %     NOTE: In matlab, if you set one optional parapeter, you must set
 %     both, rho first, then g
-%     rho: float
-%         water density (kg/m^3)
-%     g: float
-%         gravitational acceleration (m/s^2)
 %         
-%
-%     Returns
-%     -------
+% Returns
+% -------
 %     J: double
 %         Omni-directional wave energy flux (W/m)
 %
-%    Dependancies 
-%    -------------
-%    Python 3.5 or higher
-%    Pandas
-%    mhkit_python_utils
-%    Numpy
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

@@ -7,10 +7,10 @@ The :class:`~mhkit/river` module contains a set of functions to
 calculate quantities of interest for river energy converters (REC). 
 The river module contains the following submodules:
 
-* :class:`~mhkit/river/io`: Loads data from standard formats
-* :class:`~mhkit/river/resource`: Computes resource metrics such as exceedance probability, velocity, and power
-* :class:`~mhkit/river/device`: Computes device metrics such as equivalent diameter and capture area
-* :class:`~mhkit/river/graphics`: Generates graphics
+* :module:`~mhkit/river/io`: Loads data from standard formats
+* :module:`~mhkit/river/resource`: Computes resource metrics such as exceedance probability, velocity, and power
+* :module:`~mhkit/river/device`: Computes device metrics such as equivalent diameter and capture area
+* :module:`~mhkit/river/graphics`: Generates graphics
 
 Data format
 --------------

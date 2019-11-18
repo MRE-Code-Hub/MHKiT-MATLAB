@@ -3,38 +3,32 @@ function Cg=wave_celerity(k,h,varargin)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
 %    
-%    Parameters
-%    ------------
+% Parameters
+% ------------
 %    k: wave number (1/m)
-%           Pandas data frame
-%       To make a pandas data frame from user supplied frequency and spectra
-%       use py.pandas_dataframe.spectra_to_pandas(frequency,spectra)
+%       Pandas data frame
+%           To make a pandas data frame from user supplied frequency and spectra
+%           use py.pandas_dataframe.spectra_to_pandas(frequency,spectra)
+%
 %        OR
-%        k structure of form
-%        k.values= wave number
-%        k.frequency= frequency (Hz);
+%
+%        structure of form:
+%           k.values= wave number
+%
+%           k.frequency= frequency (Hz)
+%
 %    h: float
 %         Water depth (m)
-
 %
-%     Optional 
-%     ---------
-%     g: float
+%     g: float (optional)
 %         gravitational acceleration (m/s^2)
 %         
 %
-%     Returns
-%     -------
+% Returns
+% -------
 %     Cg: structure
 %         water celerity
 %
-%    Dependancies 
-%    -------------
-%    Python 3.5 or higher
-%    Pandas
-%    Scipy
-%    Numpy
-%    mhkit_python_utils
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

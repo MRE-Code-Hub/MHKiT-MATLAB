@@ -1,7 +1,7 @@
 function datast=read_NDBC_file(file_name,varargin)
 
 %%%%%%%%%%%%%%%%%%%%
-%  Reads a NDBC wave buoy data file (from https://www.ndbc.noaa.gov) into a
+%     Reads a NDBC wave buoy data file (from https://www.ndbc.noaa.gov) into a
 %     structure.
 %     
 %     Realtime and historical data files can be loaded with this function.  
@@ -15,29 +15,21 @@ function datast=read_NDBC_file(file_name,varargin)
 %     also converted to float/int when possible (this is useful when column 
 %     names are frequency).
 %     
-%     Parameters
-%     ------------
+% Parameters
+% ------------
 %     file_name : string
 %         Name of NDBC wave buoy data file
-%     
-%     Optional
-%     ------------
-%     varagin: missing_value : vector of values
+%
+%     missing_value : vector of values (optional)
 %         vector of values that denote missing data    
 %     
-%     Returns
-%     ---------
+% Returns
+% ---------
 %     data: Structure 
 %         Data: named according to header row 
 %         time: given in datetime 
 %         units: the units for each data entry
 %         
-%    Dependancies 
-%    -------------
-%    Python 3.5 or higher
-%    numpy
-%    mhkit
-%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 py.importlib.import_module('mhkit');

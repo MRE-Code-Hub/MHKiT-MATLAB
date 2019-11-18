@@ -3,35 +3,29 @@ function k=wave_number(f,h,varargin)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
 %    
-%    Parameters
-%    ------------
+% Parameters
+% ------------
 %    f: frequency (Hz)
 %           vector or numpy array
 %    h: float
 %         Water depth (m)
 %
-%     Optional 
-%     ---------
+%     rho: float (optional)
+%         water density (kg/m^3)
+%
+%     g: float (optional)
+%         gravitational acceleration (m/s^2)
+
 %     NOTE: In matlab, if you set one optional parapeter, you must set
 %     both, rho first, then g
-%     rho: float
-%         water density (kg/m^3)
-%     g: float
-%         gravitational acceleration (m/s^2)
 %         
 %
-%     Returns
-%     -------
+% Returns
+% -------
 %     k: structure
 %         k.values: wave number
 %         k.frequency: frequency [Hz]
 %
-%    Dependancies 
-%    -------------
-%    Python 3.5 or higher
-%    Pandas
-%    Scipy
-%    Numpy
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

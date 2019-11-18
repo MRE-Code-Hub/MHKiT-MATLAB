@@ -16,7 +16,7 @@
 import os
 import sys
 # sys.path.insert(0, os.path.abspath('.'))
-sys.path.insert(0, os.path.abspath('..\\'))
+#sys.path.insert(0, os.path.abspath('..\\'))
 
 # -- Project information -----------------------------------------------------
 
@@ -165,7 +165,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'MHKiTPython.tex', 'MHKiT-Python Documentation',
+    (master_doc, 'MHKiTMatlab.tex', 'MHKiT-Matlab Documentation',
      'MHKiT Developers', 'manual'),
 ]
 
@@ -175,7 +175,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'mhkitpython', 'MHKiT-Python Documentation',
+    (master_doc, 'mhkitmatlab', 'MHKiT-Matlab Documentation',
      [author], 1)
 ]
 
@@ -186,8 +186,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'MHKiTPython', 'MHKiT-Python Documentation',
-     author, 'MHKiTPython', 'One line description of project.',
+    (master_doc, 'MHKiTMatlab', 'MHKiT-Matalb Documentation',
+     author, 'MHKiTMatlab', 'One line description of project.',
      'Miscellaneous'),
 ]
 

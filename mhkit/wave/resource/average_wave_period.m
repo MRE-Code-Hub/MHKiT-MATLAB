@@ -1,32 +1,29 @@
-function Tm=average_wave_period(S)
+function Tavg=average_wave_period(S)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
 %    
-%    Parameters
-%    ------------
-%    S: Spectral Density (m^2-s)
-%           Pandas data frame
-%       To make a pandas data frame from user supplied frequency and spectra
-%       use py.pandas_dataframe.spectra_to_pandas(frequency,spectra)
-%        OR
-%        wave_spectra structure of form
-%        wave_spectra.spectrum=Spectral Density (m^2-s;
-%         wave_spectra.type=String of the spectra type, i.e. Bretschneider, 
-%                time series, date stamp etc. ;
-%         wave_spectra.frequency= frequency (Hz);
+% Parameters
+% ------------
+%    S: Spectral Density (m^2/Hz)
+%       Pandas data frame
+%           To make a pandas data frame from user supplied frequency and spectra
+%           use py.pandas_dataframe.spectra_to_pandas(frequency,spectra)
 %
-%    Returns
-%    ---------
-%    Tavg:  double
-%        Average Wave Period (s)
+%       OR
 %
-%    Dependancies 
-%    -------------
-%    Python 3.5 or higher
-%    Pandas
-%    mhkit_python_utils
-%    numpy
+%       structure of form:
+%           wave_spectra.spectrum: Spectral Density (m^2/Hz)
+%
+%           wave_spectra.type: String of the spectra type, i.e. Bretschneider, 
+%           time series, date stamp etc.
+%
+%           wave_spectra.frequency: frequency (Hz)
+%
+% Returns
+% --------
+%     Tavg: float
+%           Mean wave period (s)
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -56,4 +53,4 @@ if (isa(S,'py.pandas.core.frame.DataFrame')~=1)
 end
 
 Tm=py.mhkit.wave.resource.average_wave_period(S);
-Tm=double(Tm.values);
+Tavg=double(Tm.values);

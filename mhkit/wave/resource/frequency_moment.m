@@ -1,35 +1,33 @@
 function m=frequency_moment(S,N)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Calculates time-series of wave amplitude from spectrum using random phase
+%   Calculates time-series of wave amplitude from spectrum using random phase
 %    
-%    Parameters
-%    ------------
-%    S: Spectral Density (m^2-s)
-%           Pandas data frame
-%       To make a pandas data frame from user supplied frequency and spectra
-%       use py.pandas_dataframe.spectra_to_pandas(frequency,spectra)
-%        OR
-%        wave_spectra structure of form
-%        wave_spectra.spectrum=Spectral Density (m^2-s;
-%         wave_spectra.type=String of the spectra type, i.e. Bretschneider, 
-%                time series, date stamp etc. ;
-%         wave_spectra.frequency= frequency (Hz);
+% Parameters
+% ------------
+%    S: Spectral Density (m^2/Hz)
+%       Pandas data frame
+%           To make a pandas data frame from user supplied frequency and spectra
+%           use py.pandas_dataframe.spectra_to_pandas(frequency,spectra)
+%
+%       OR
+%
+%       structure of form:
+%           wave_spectra.spectrum: Spectral Density (m^2/Hz)
+%
+%           wave_spectra.type: String of the spectra type, i.e. Bretschneider, 
+%           time series, date stamp etc.
+%
+%           wave_spectra.frequency: frequency (Hz)
 %   
 %    N: int
 %       Moment (0 for 0th, 1 for 1st ....)
 %
-%    Returns
-%    ---------
+% Returns
+% ---------
 %    m: double 
 %        
 %
-%    Dependancies 
-%    -------------
-%    Python 3.5 or higher
-%    Pandas
-%    mhkit_python_utils
-%    Numpy
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

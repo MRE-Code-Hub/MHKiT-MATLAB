@@ -1,11 +1,16 @@
+.. _wave:
+
 Wave module
 ========================================
 
-The wave module contains submodules (resource, device, and graphics) that can be used to
-load data from standard formats,
-compute wave energy spectra and various metrics from the spectra,
-compute power performance metrics,
-and generate graphics. 
+The :class:`~mhkit.wave` module contains a set of functions to
+calculate quantities of interest for wave energy converters (WEC). 
+The wave module contains the following submodules:
+
+* :class:`~mhkit.wave.io`: Loads data from standard formats
+* :class:`~mhkit.wave.resource`: Computes resource metrics such as spectra and significant wave height
+* :class:`~mhkit.wave.performance`: Computes performance metrics such as capture length matrix and mean annual energy production
+* :class:`~mhkit.wave.graphics`: Generates graphics
 
 Data formats and IO
 --------------------
