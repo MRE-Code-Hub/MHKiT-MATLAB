@@ -2,38 +2,44 @@ function clm=capture_length_matrix(Hm0,Te,L,statistic,Hm0_bins,Te_bins)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
-%  Generates a capture length matrix for a given statistic
+%     Generates a capture length matrix for a given statistic
 %    
 %     Note that IEC/TS 62600-100 requires capture length matrices for 
 %     the mean, std, count, min, and max.
 %     
-%     Parameters
-%     ------------
+% Parameters
+% ------------
 %     Hm0: numpy array or vector
 %         Significant wave height from spectra [m]
+%
 %     Te: numpy array or vector
 %         Energy period from spectra [s]
+%
 %     L : numpy array or vector
 %         Capture length [m]
+%
 %     statistic: string
 %         Statistic for each bin, options include: 'mean', 'std', 'median', 
 %         'count', 'sum', 'min', 'max', and 'frequency'.  Note that 'std' uses 
 %         a degree of freedom of 1 in accordance with IEC/TS 62600-100.
+%
 %     Hm0_bins: numpy array or vector
 %         Bin centers for Hm0 [m]
+%
 %     Te_bins: numpy array or vector
 %         Bin centers for Te [s]
 %         
-%     Returns
-%     ---------
+% Returns
+% ---------
 %     clm: structure
-% 
-%    Dependancies 
-%    -------------
-%    Python 3.5 or higher
-%    numpy
-%    mhkit
+%        clm.values
 %
+%        clm.stat
+%
+%        clm.Hm0_bins
+%
+%        clm.Te_bins
+% 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 

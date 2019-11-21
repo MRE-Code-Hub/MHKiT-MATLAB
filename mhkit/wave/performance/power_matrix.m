@@ -2,31 +2,29 @@ function PM=power_matrix(LM,JM)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
-%  Generates a power matrix from a capture length matrix and wave energy 
+%     Generates a power matrix from a capture length matrix and wave energy 
 %     flux matrix
 % 
-%     Parameters
-%     ------------
+% Parameters
+% ------------
 %     LM: structure
 %         LM.values: Capture length matrix
+%
 %         LM.Hm0_bins
+%
 %         LM.Te_bins
+%
 %     JM: structure
 %         JM.values: Wave energy flux matrix
+%
 %         JM.Hm0_bins
+%
 %         JM.Te_bins
 %         
-%     Returns
-%     ---------
+% Returns
+% ---------
 %     PM: Structure
 %         Power matrix
-%
-%    Dependancies 
-%    -------------
-%    Python 3.5 or higher
-%    numpy
-%    mhkit
-%    mhkit_python_utils
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

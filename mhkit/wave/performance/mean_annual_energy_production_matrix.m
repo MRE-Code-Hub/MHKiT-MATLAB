@@ -2,31 +2,26 @@ function maep=mean_annual_energy_production_matrix(LM,JM,frequency)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
-%    Calculates mean annual energy production (MAEP) from matrix data 
+%     Calculates mean annual energy production (MAEP) from matrix data 
 %     along with data frequency in each bin
 %     
-%     Parameters
-%     ------------
+% Parameters
+% ------------
 %     LM: structure
 %         Capture length
+%
 %     JM: structure
 %         Wave energy flux
+%
 %     frequency: structure 
 %         Data frequency for each bin. 
 %         created by capture_length_matrix or Wave_energy_flux_matrix with
 %         "count" option
 %         
-%     Returns
-%     ---------
+% Returns
+% ---------
 %     maep: float
 %         Mean annual energy production
-%
-%    Dependancies 
-%    -------------
-%    Python 3.5 or higher
-%    numpy
-%    mhkit
-%    mhkit_python_utils
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

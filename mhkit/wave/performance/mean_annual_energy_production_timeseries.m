@@ -2,25 +2,20 @@ function maep=mean_annual_energy_production_timeseries(L,J)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
-%  Calculates mean annual energy production (MAEP) from timeseries
+%     Calculates mean annual energy production (MAEP) from timeseries
 %     
-%     Parameters
-%     ------------
+% Parameters
+% ------------
 %     L: numpy array or vector
 %         Capture length
+%
 %     J: numpy array or vector
 %         Wave energy flux
 %         
-%     Returns
-%     ---------
+% Returns
+% ---------
 %     maep: float
 %         Mean annual energy production
-%
-%    Dependancies 
-%    -------------
-%    Python 3.5 or higher
-%    numpy
-%    mhkit
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

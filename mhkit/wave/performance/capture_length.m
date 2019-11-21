@@ -3,24 +3,20 @@ function L=capture_length(Power,J)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
 %    
-%    Calculates the capture length (often called capture width).
+%     Calculates the capture length (often called capture width).
 % 
-%     Parameters
-%     ------------
+% Parameters
+% ------------
 %     P: numpy array or vector
 %         Power [W]
+%
 %     J: numpy array or vector
 %         Omnidirectional wave energy flux [W/m]
 %     
-%     Returns
-%     ---------
+% Returns
+% ---------
 %     L: vector
 %         Capture length [m]
-%
-%    Dependancies 
-%    -------------
-%    Python 3.5 or higher
-%    numpy
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
