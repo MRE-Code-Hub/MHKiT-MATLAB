@@ -3,19 +3,24 @@ function figure=plot_matrix(M,Mtype)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %    Plots the matrix with Hm0 and Te on the y and x axis
 %
-%    Input
-%    -------
+% Input
+% -------
 %    M: structure
+%
 %         M.values: matrix
+%
 %         M.Hm0_bins
+%
 %         M.Te_bins
+%
 %         M.stat
+%
 %    Mtype: string
-%         type of matrix (i.e. power, caplture length, etc.) will be used
+%         type of matrix (i.e. power, caplture length, etc.) to be be used
 %         in plot title 
 %
-%   Returns
-%   ---------
+% Returns
+% ---------
 %   figure: plot of the matrix
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
