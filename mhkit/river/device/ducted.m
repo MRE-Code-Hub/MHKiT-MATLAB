@@ -4,22 +4,18 @@ function [equivalent_diameter,projected_capture_area]=ducted(diameter)
 %     Calculates the equivalent diameter and projected capture area of a 
 %     ducted turbine
 %     
-%     Parameters
-%     ------------
+% Parameters
+% ------------
 %     diameter : float
 %         ducted diameter [m]
 %         
-%     Returns
-%     ---------
+% Returns
+% ---------
 %     equivalent_diameter : float
 %        Equivalent diameter [m]
+%
 %     projected_capture_area : float
 %         Projected capture area [m^2]
-%
-%    Dependancies 
-%    -------------
-%    Python 3.5 or higher
-%    mhkit
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 py.importlib.import_module('mhkit');

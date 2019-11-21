@@ -1,25 +1,25 @@
 function figure=plot_discharge_vs_velocity(D,V,varargin)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Plots discharge vs velocity 
+%     Plots discharge vs velocity 
 %     
-%     Parameters
-%     ------------
+% Parameters
+% ------------
 %     D: array
 %         Discharge [m/s]
+%
 %     V: array
 %         Velocity [m/s] 
-%   Optional
-%  ----------
-%  title: string
-%       title for the plot
 %
-%   polynomial_coeff: array
+%     title: string (optional)
+%         title for the plot
+%
+%   polynomial_coeff: array (optional)
 %       polynomial coefficients which can be computed from 
 %       polynomial_fit.m. Expects poly.coef
 % 
-%   Returns
-%   ---------
-%   figure
+% Returns
+% ---------
+%   figure: plot of discharge vs. velocity
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 figure=plot(D,V);

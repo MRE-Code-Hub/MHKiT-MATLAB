@@ -1,23 +1,21 @@
 function figure=plot_flow_duration_curve(D,F,varargin)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Plots discharge vs exceedance probability as a Flow Duration Curve (FDC) 
+%     Plots discharge vs exceedance probability as a Flow Duration Curve (FDC) 
 %     
-%     Parameters
-%     ------------
+% Parameters
+% ------------
 %     D: array
 %         Discharge [m/s] 
 %         
 %     F: array 
 %          Exceedance probability [unitless]
 %
-%   Optional
-%  ----------
-%  title: string
-%       title for the plot
+%     title: string (optional)
+%          title for the plot
 % 
-%   Returns
-%   ---------
-%   figure
+% Returns
+% ---------
+%   figure: plot of discharge vs. exceedance probability 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 temp.D=D;

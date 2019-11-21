@@ -1,23 +1,21 @@
 function figure=plot_velocity_duration_curve(V,F,varargin)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Plots velocity vs exceedance probability as a Flow Duration Curve (FDC) 
+%     Plots velocity vs exceedance probability as a Flow Duration Curve (FDC) 
 %     
-%     Parameters
-%     ------------
+% Parameters
+% ------------
 %     V: array
 %         Velocity [m/s] 
 %         
 %     F: array 
 %          Exceedance probability [unitless]
 %
-%   Optional
-%  ----------
-%  title: string
-%       title for the plot
+%     title: string (optional)
+%          title for the plot
 % 
-%   Returns
-%   ---------
-%   figure
+% Returns
+% ---------
+%   figure: plot of velocity vs. exceedance probability 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 temp.V=V;

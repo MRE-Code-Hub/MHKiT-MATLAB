@@ -4,26 +4,22 @@ function Fr=Froude_number(v,h,varargin)
 %     Calculate the Froude Number of the river, channel or duct flow,
 %     to check subcritical flow assumption (if Fr <1).
 %     
-%     Parameters
-%     ------------
+% Parameters
+% ------------
 %     v : float 
 %         Average Velocity [m/s].
+%
 %     h : float
 %         Mean hydrolic depth float [m].
-%     Optional
-%     g : float
+%
+%     g : float (optional)
 %         gravitational acceleration [m/s2].
 % 
-%     Returns
-%     ---------
+% Returns
+% ---------
 %     Fr : float
 %         Froude Number of the river [unitless].
 % 
-%   
-%    Dependancies 
-%    -------------
-%    Python 3.5 or higher
-%    mhkit
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 py.importlib.import_module('mhkit');

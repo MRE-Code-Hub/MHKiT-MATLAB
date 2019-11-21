@@ -1,33 +1,32 @@
 function p=velocity_to_power(V,polynomial_coefficients,cut_in,cut_out)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Calculates power given velocity data and the relationship 
+%     Calculates power given velocity data and the relationship 
 %     between velocity and power from an individual turbine
 %     
-%     Parameters
-%     ----------
+% Parameters
+% ----------
 %     V : pandas dataframe or structure
 %         Velocity [m/s] indexed by time [s]
+%
 %     polynomial_coefficients : numpy polynomial
 %         List of polynomial coefficients that discribe the relationship between 
 %         velocity and power at an individual turbine
+%
 %     cut_in: float
 %         Velocity values below cut_in are not used to compute P
+%
 %     cut_out: float
 %         Velocity values above cut_out are not used to compute P
 %     
-%     Returns   
-%     -------
+% Returns   
+% -------
 %     p : Structure 
-%        P: Power [W] 
-%        time: epoch time [s]
 %
-%    Dependancies 
-%    -------------
-%    Python 3.5 or higher
-%    Pandas
-%    mhkit_python_utils
-%    numpy
+%        P.P: Power [W] 
+%
+%        P.time: epoch time [s]
+%
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

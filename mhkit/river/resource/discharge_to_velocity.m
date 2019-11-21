@@ -1,28 +1,33 @@
 function V=discharge_to_velocity(D,polynomial_coefficients)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Calculates velocity given discharge data and the relationship between 
+%     Calculates velocity given discharge data and the relationship between 
 %     discharge and velocity at an individual turbine
 %     
-%     Parameters
-%     ------------
-%     D : Pandas dataframe or structure
-%         Discharge data [m3/s] indexed by time [datetime or s]
+% Parameters
+% ------------
+%     D : Discharge data [m3/s]
+%         Pandas dataframe indexed by time [datetime or s]         
+%           To make a pandas data frame from user supplied frequency and spectra
+%           use py.mhkit_python_utils.pandas_dataframe.timeseries_to_pandas(timeseries,time,x)
+%
+%          OR
+%
+%          structure of form:
+%
+%               D.Discharge
+%
+%               D.time
+% 
 %     polynomial_coefficients : numpy polynomial
 %         List of polynomial coefficients that discribe the relationship between 
 %         discharge and velocity at an individual turbine
 %     
-%     Returns   
-%     ------------
+% Returns   
+% ------------
 %     V: pandas DataFrame   
 %         Velocity [m/s] indexed by time [datetime or s]
 %
-%    Dependancies 
-%    -------------
-%    Python 3.5 or higher
-%    Pandas
-%    mhkit_python_utils
-%    numpy
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -51,7 +56,7 @@ if (isa(D,'py.pandas.core.frame.DataFrame')~=1)
     end
     D=py.mhkit_python_utils.pandas_dataframe.timeseries_to_pandas(li,D.time,int32(x(2)));
 end
-disp(D)
+
 polynomial_coefficients=py.numpy.poly1d(polynomial_coefficients);
 
 Vdf=py.mhkit.river.resource.discharge_to_velocity(D,polynomial_coefficients);

@@ -1,27 +1,25 @@
 function figure=plot_velocity_vs_power(V,P,varargin)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Plots velovity vs power along with a polynomial fit 
+%     Plots velocity vs power along with a polynomial fit 
 %     
-%     Parameters
-%     ------------
+% Parameters
+% ------------
 %     V: array
 %         Velocity [m/s] 
 %         
 %     P: array 
 %          Power [W]
 %
-%   Optional
-%  ----------
-%  title: string
-%       title for the plot
+%      title: string (optioanl)
+%          title for the plot
 %
-%   polynomial_coeff: array
-%       polynomial coefficients which can be computed from 
-%       polynomial_fit.m. Expects poly.coef
+%      polynomial_coeff: array (optional)
+%          polynomial coefficients which can be computed from 
+%          polynomial_fit.m. Expects poly.coef
 % 
-%   Returns
-%   ---------
-%   figure
+% Returns
+% ---------
+%   figure: plot of velocity vs. power
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 figure=plot(V,P);

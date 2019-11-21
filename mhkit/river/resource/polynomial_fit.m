@@ -1,28 +1,27 @@
 function poly=polynomial_fit(x,y,n)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Returns a polynomial fit for y given x of order n.
+%     Returns a polynomial fit for y given x of order n.
 % 
-%     Parameters
-%     ===========
+% Parameters
+% ----------
 %     x : array
 %         x data for polynomial fit.
+%
 %     y : array
 %         y data for polynomial fit.
+%
 %     n : int
 %         order of the polynomial fit.
 % 
-%     Returns
-%     ==========
+% Returns
+% --------
 %     poly: structure
-%       coef: polynomial coefficients 
-%       fit: fit coefficients
 %
-%    Dependancies 
-%    -------------
-%    Python 3.5 or higher
-%    mhkit
-%    numpy
+%       poly.coef: polynomial coefficients 
+%
+%       poly.fit: fit coefficients
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 py.importlib.import_module('mhkit');

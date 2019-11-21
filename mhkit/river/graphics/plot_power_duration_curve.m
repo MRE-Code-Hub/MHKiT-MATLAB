@@ -1,23 +1,21 @@
 function figure=plot_power_duration_curve(P,F,varargin)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Plots power vs exceedance probability as a Flow Duration Curve (FDC) 
+%     Plots power vs exceedance probability as a Flow Duration Curve (FDC) 
 %     
-%     Parameters
-%     ------------
+% Parameters
+% ------------
 %     P: array
 %         Power [W] 
 %         
 %     F: array 
 %          Exceedance probability [unitless]
 %
-%   Optional
-%  ----------
-%  title: string
+%     title: string (Optional)
 %       title for the plot
 % 
-%   Returns
-%   ---------
-%   figure
+% Returns
+% ---------
+%   figure: plot of power vs. exceedance probability
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 temp.P=P;

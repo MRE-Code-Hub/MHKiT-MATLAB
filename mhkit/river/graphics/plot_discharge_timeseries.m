@@ -1,21 +1,21 @@
 function figure=plot_discharge_timeseries(D,varargin)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Plots discharge vs time 
+%     Plots discharge vs time 
 %     
-%     Parameters
-%     ------------
+% Parameters
+% ------------
 %     D: structure
-%         D.Discharge=Discharge [m/s]
-%         D.time= time
+%
+%      D.Discharge=Discharge [m/s]
+%
+%      D.time= time
 %         
-%   Optional
-%  ----------
-%  title: string
+%     title: string (optional)
 %       title for the plot
 % 
-%   Returns
-%   ---------
-%   figure
+% Returns
+% ---------
+%     figure: Plot of discharge vs. time
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 figure=plot(D.time,D.Discharge);

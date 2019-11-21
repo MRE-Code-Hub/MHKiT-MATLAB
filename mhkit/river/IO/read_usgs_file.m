@@ -4,23 +4,19 @@ function datast=read_usgs_file(file_name)
 %     Reads a USGS JSON data file (from https://waterdata.usgs.gov/nwis) 
 %     into a structure 
 % 
-%     Parameters
-%     ----------
+% Parameters
+% ----------
 %     file_name : str
 %         Name of USGS JSON data file
 %         
-%     Returns
-%     -------
-%     data : structure  
-%         Data:named according to the parameter's variable description
-%         time: epoch time [s]
-%         units: units for each parameter
+% Returns
+% -------
+%     datast : structure  
+%         datast.Data:named according to the parameter's variable description
 %
-%    Dependancies 
-%    -------------
-%    Python 3.5 or higher
-%    mhkit
-%    numpy
+%         datast.time: epoch time [s]
+%
+%         datast.units: units for each parameter
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 py.importlib.import_module('mhkit');

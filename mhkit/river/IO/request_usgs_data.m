@@ -4,42 +4,42 @@ function datast=request_usgs_data(station, parameter, start_date, end_date,varar
 %     Loads USGS data directly from https://waterdata.usgs.gov/nwis using a 
 %     GET request into a pandas DataFrame
 %     
-%     The request URL prints to the screen.
 % 
-%     Parameters
-%     ----------
+% Parameters
+% ----------
 %     station : str
 %         USGS station number (e.g. '08313000')
+%
 %     parameter : str
 %         USGS paramter ID (e.g. '00060' for Discharge, cubic feet per second)
+%
 %     start_date : str
 %         Start date in the format 'YYYY-MM-DD' (e.g. '2018-01-01')
+%
 %     end_date : str
 %         End date in the format 'YYYY-MM-DD' (e.g. '2018-12-31')
 %
-%     Optional
-%     ---------
-%     data_type : str
+%     data_type : str (optional)
 %         Data type, options include 'Daily' (return the mean daily value) and 
 %         'Instantaneous'.
-%     proxy : dict or None
+%
+%     proxy : dict or None (optional)
 %          To request data from behind a firewall, define a dictionary of proxy settings, 
 %          for example {"http": 'localhost:8080'}
-%     write_json : str or None
+%
+%     write_json : str or None (optional)
 %         Name of json file to write data
 %         
 %     Returns
 %     -------
-%     data : structure  
-%         Data:named according to the parameter's variable description
-%         time: datetime
-%         units: units for each parameter
+%     data : structure 
 %
-%    Dependancies 
-%    -------------
-%    Python 3.5 or higher
-%    mhkit
-%    numpy
+%         datast.Data:named according to the parameter's variable description
+%
+%         datast.time: datetime
+%
+%         datast.units: units for each parameter
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%% NOTE: TODO: still need to add creation of dictionary from structure

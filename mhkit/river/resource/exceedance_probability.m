@@ -1,28 +1,28 @@
 function EP=exceedance_probability(D)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Calculates the exceedance probability
+%     Calculates the exceedance probability
 %    
-%     Parameters
-%     ----------
-%     D : structure  
-%               Discharge data [m^3/s] indexed by time [datetime].  Note that 
-%               river resource calculations require 10 years of daily data.
-%         or Structure
+% Parameters
+% ----------
+%     D : Discharge data [m3/s]
+%         Pandas dataframe indexed by time [datetime or s]         
+%           To make a pandas data frame from user supplied frequency and spectra
+%           use py.mhkit_python_utils.pandas_dataframe.timeseries_to_pandas(timeseries,time,x)
+%
+%          OR
+%
+%          structure of form:
+%
 %               D.Discharge
-%               D.time in epoch time(s)
+%
+%               D.time
 %         
-%     Returns   
-%     -------
+% Returns   
+% -------
 %     EP : Structure     
 %         Exceedance probability [unitless] indexed by time [epoch time (s)]
 %
-%    Dependancies 
-%    -------------
-%    Python 3.5 or higher
-%    Pandas
-%    mhkit_python_utils
-%    numpy
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
