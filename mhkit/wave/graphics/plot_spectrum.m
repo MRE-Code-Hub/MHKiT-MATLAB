@@ -3,8 +3,8 @@ function figure=plot_spectrum(wave_spectra)
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %     Plots wave amplitude spectrum
 %     
-% Input
-% ------
+% Parameters
+% ----------
 %     wave_spectra: Structure of the following form:
 %
 %         wave_spectra.spectrum=Spectral Density (m^2-s;

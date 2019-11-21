@@ -8,7 +8,7 @@ function m=frequency_moment(S,N)
 %    S: Spectral Density (m^2/Hz)
 %       Pandas data frame
 %           To make a pandas data frame from user supplied frequency and spectra
-%           use py.pandas_dataframe.spectra_to_pandas(frequency,spectra)
+%           use py.mhkit_python_utils.pandas_dataframe.spectra_to_pandas(frequency,spectra)
 %
 %       OR
 %

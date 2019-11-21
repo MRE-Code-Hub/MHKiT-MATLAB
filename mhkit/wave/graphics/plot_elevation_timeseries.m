@@ -3,7 +3,7 @@ function figure=plot_elevation_timeseries()
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %     Plots wave elevation timeseries
 %     
-% Input
+% Parameters
 % ------------
 %     wave_elevation: Structure of the following form:
 %

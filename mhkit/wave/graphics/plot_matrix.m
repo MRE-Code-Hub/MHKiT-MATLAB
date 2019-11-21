@@ -3,8 +3,8 @@ function figure=plot_matrix(M,Mtype)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %    Plots the matrix with Hm0 and Te on the y and x axis
 %
-% Input
-% -------
+% Parameters
+% ----------
 %    M: structure
 %
 %         M.values: matrix

@@ -28,7 +28,7 @@ function wave_spectra=elevation_spectrum(ts,sample_rate,nnft,time,varargin)
 % Returns
 % ---------
 %     wave_spectra: structure 
-%         wave_spectra.spectrum: cell array
+%         wave_spectra.spectrum: vector or matrix
 %            Spectral Density (m^2/Hz) per probe
 %
 %         wave_spectra.type: 'Spectra from Time Series'
