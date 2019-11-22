@@ -46,13 +46,17 @@ Required Python package dependencies include:
 * **Requests**: used to get data from websites, https://requests.readthedocs.io/
 * **Pecos**: used for quality control analysis, https://pecos.readthedocs.io/
 
+mhkit_python_utils package
+--------------------------
+
 Matlab Requirements
 --------------------
 Matlab 2013b or later is required to run Python from Matlab. MHKit Matlab has been tested on versions 2019b and 2018b.
 
 MHKit Matlab Installation
 --------------------------
-Download MHKit Matlab.......
+Download mhkit.mltbx from https://code.primre.org/mhkit/matlab. 
+In Matlab, navigate to the folder where you downloaded mhkit.mltbx to, double click on it, and the toolbox will install automatically. 
 
 Setup Matlab Environment
 --------------------------
