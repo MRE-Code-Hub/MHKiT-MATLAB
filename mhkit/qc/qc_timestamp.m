@@ -1,8 +1,6 @@
-function results = qc_delta(data,bound,varargin)
-
+function results = qc_timestamp(data, freq, varargin)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%   Check for stagnant data and/or abrupt changes in the data using
-%   difference between max and min values within a rolling window
+%    Check time series for missing, non-monotonic, and duplicate timestamps
 %    
 % Parameters
 % ------------
@@ -18,25 +16,24 @@ function results = qc_delta(data,bound,varargin)
 %             data.values: 2D array of doubles with arbitrary number of columns
 %             data.time:   1D array of datetimes or posix times
 %
-%     bound: array of floats
-%         [lower bound, upper bound] for min/max delta checking
-%         NaN or py.None can be used for either bound 
+%     freq: int
+%         Expected time series frequency, in seconds
 %
-%     key: string (optional)
-%         Data column name or translation dictionary key.  If not specified
-%         or set to py.None, all columns are used for test.
+%     expected_start_time: Timestamp (optional)
+%         Expected start time.  Default: min(data.time)
 %
-%     window: int (optional)
-%         Size of rolling window (in seconds) used to compute delta
-%         default = 3600
-%
-%     absolute_value: logical (optional)
-%         Use the absolute value of delta, default = 1 (True)
+%     expected_end_time: Timestamp (optional)
+%         Expected end time.  Default: max(data.time)
 %
 %     min_failures: int (optional)
-%
 %         Minimum number of consecutive failures required for reporting,
 %         default = 1
+%
+%     exact_times: logical (optional)
+%         If 1 (True), times are expected to occur at regular intervals
+%         (specified by freq) and data is reindexed to match expected frequency 
+%         If 0 (False), times only need to occur once or more within each interval
+%         (specified by freq) and data is not reindexed
 %
 %     Must set previous arguments to use later optional arguments
 %     (i.e. must set key to use min_failures).
@@ -54,7 +51,7 @@ function results = qc_delta(data,bound,varargin)
 %            Logical mask of QC results (1 = passed, 0 = failed QC test) 
 %
 %         results.time: array of datetimes
-%            Same as input times 
+%            Same as input times (possibly reindexed by exact_times)
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -66,24 +63,23 @@ function results = qc_delta(data,bound,varargin)
   end
 
   if nargin == 2
-    r = struct(py.pecos.monitoring.check_delta(data,bound));
+    r = struct(py.pecos.monitoring.check_timestamp(data,freq));
   elseif nargin == 3
-    r = struct(py.pecos.monitoring.check_delta(data,bound,...
+    % Unlike the others, this might need a little work to convert 
+    % start and end times into something python can use
+    r = struct(py.pecos.monitoring.check_timestamp(data,freq,...
 	      varargin{1}));
   elseif nargin == 4
-    r = struct(py.pecos.monitoring.check_delta(data,bound,...
+    r = struct(py.pecos.monitoring.check_timestamp(data,freq,...
 	      varargin{1},varargin{2}));
   elseif nargin == 5
-    r = struct(py.pecos.monitoring.check_delta(data,bound,...
+    r = struct(py.pecos.monitoring.check_timestamp(data,freq,...
 	      varargin{1},varargin{2},varargin{3}));
   elseif nargin == 6
-    r = struct(py.pecos.monitoring.check_delta(data,bound,...
+    r = struct(py.pecos.monitoring.check_timestamp(data,freq,...
 	      varargin{1},varargin{2},varargin{3},varargin{4}));
-  elseif nargin == 7
-    r = struct(py.pecos.monitoring.check_delta(data,bound,...
-	      varargin{1},varargin{2},varargin{3},varargin{4},varargin{5}));
   else
-    ME = MException('MATLAB:qc_delta','incorrect number of arguments (2 to 7)');
+    ME = MException('MATLAB:qc_timestamp','incorrect number of arguments (2 to 6)');
         throw(ME);
   end
 
